@@ -1,18 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ControlWorks.Services.Configuration;
+using log4net;
+using System;
 using Topshelf;
 
 namespace ControlWorks.Service.Faspac
 {
     class Program
     {
+        protected static ILog Log = LogManager.GetLogger(ConfigurationProvider.ServiceLoggerName); 
+
         static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             const string name = "ControlWorksFaspacService";
             const string description = "Control Works communication service";
+
+            Log.Info($"Initializing Service {name} - {description}");
 
             try
             {
@@ -33,9 +37,17 @@ namespace ControlWorks.Service.Faspac
             }
             catch (Exception ex)
             {
-                Console.WriteLine("WcfCommunicationService Service fatal exception. " + ex.Message);
+                Log.Fatal("ControlWorksFaspacService Service fatal exception.");
+                Log.Fatal(ex.Message, ex);
             }
 
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Log.Fatal("Unhandled Application Domain Error");
+            var ex = e.ExceptionObject as Exception;
+            Log.Fatal(ex.Message, ex);
         }
     }
 }

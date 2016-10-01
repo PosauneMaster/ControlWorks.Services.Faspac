@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{4D21FF9E-430
 		lib\BR.AN.PviServices.dll = lib\BR.AN.PviServices.dll
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlWorks.Services.Configuration", "ControlWorks.Services.Configuration\ControlWorks.Services.Configuration.csproj", "{3E96958C-602B-4B53-BE2F-686DA81F852E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{D312A083-AAEA-41F7-BC3E-C8B25C788480}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D312A083-AAEA-41F7-BC3E-C8B25C788480}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D312A083-AAEA-41F7-BC3E-C8B25C788480}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E96958C-602B-4B53-BE2F-686DA81F852E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E96958C-602B-4B53-BE2F-686DA81F852E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E96958C-602B-4B53-BE2F-686DA81F852E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E96958C-602B-4B53-BE2F-686DA81F852E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
