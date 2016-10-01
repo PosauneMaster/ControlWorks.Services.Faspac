@@ -12,7 +12,7 @@ namespace ControlWorks.Service.Rest
         [HttpGet]
         public IHttpActionResult Greeting()
         {
-            return Ok("Hello World!");
+            return Ok("Hello Control Works!");
         }
     }
 }

@@ -10,5 +10,7 @@ namespace ControlWorks.Services.Configuration
     public static class ConfigurationProvider
     {
         public static string ServiceLoggerName { get; } = ConfigurationManager.AppSettings["ServiceLoggerName"] ?? "ServiceLogger";
+        public static string Port { get; } = ConfigurationManager.AppSettings["Port"] ?? "8080";
+
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.Owin.Hosting;
+﻿using ControlWorks.Logging;
+using ControlWorks.Services.Configuration;
+using Microsoft.Owin.Hosting;
 using Owin;
 using System;
 using System.Collections.Generic;
@@ -24,9 +26,12 @@ namespace ControlWorks.Service.Rest
             app.UseWebApi(config);
         }
 
-        public static void Start()
+        public static void Start(ILogger logger)
         {
-            WebApp.Start<Startup>("http://*:8080");
+            var hostUrl = $"http://*:{ConfigurationProvider.Port}";
+            logger.Log(new LogEntry(LoggingEventType.Information, $"Starting WebApi at host {hostUrl}"));
+
+            WebApp.Start<Startup>(hostUrl);
 
         }
     }

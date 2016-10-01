@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ControlWorks.Service.Rest</RootNamespace>
     <AssemblyName>ControlWorks.Service.Rest</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -89,6 +90,16 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ControlWorks.Logging\ControlWorks.Logging.csproj">
+      <Project>{69fe20e8-da32-45c7-acd5-7eb2fac57245}</Project>
+      <Name>ControlWorks.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ControlWorks.Services.Configuration\ControlWorks.Services.Configuration.csproj">
+      <Project>{3e96958c-602b-4b53-be2f-686da81f852e}</Project>
+      <Name>ControlWorks.Services.Configuration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
