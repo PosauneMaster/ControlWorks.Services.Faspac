@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlWorks.Services.Faspa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlWorks.Service.Rest", "ControlWorks.Service.Rest\ControlWorks.Service.Rest.csproj", "{D312A083-AAEA-41F7-BC3E-C8B25C788480}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{4D21FF9E-4301-42BB-B836-9D010D064035}"
+	ProjectSection(SolutionItems) = preProject
+		lib\BR.AN.PviServices.dll = lib\BR.AN.PviServices.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
