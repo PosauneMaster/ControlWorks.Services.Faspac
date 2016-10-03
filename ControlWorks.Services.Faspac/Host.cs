@@ -20,8 +20,8 @@ namespace ControlWorks.Service.Faspac
         public void Start()
         {
             Logger.Log(new LogEntry(LoggingEventType.Information, "Host: Start"));
-
             Startup.Start(Logger);
+            //var restApiTaskl = new Task(() => Startup.Start(Logger), TaskCreationOptions.LongRunning | TaskCreationOptions.PreferFairness);
         }
 
         public void Stop()
