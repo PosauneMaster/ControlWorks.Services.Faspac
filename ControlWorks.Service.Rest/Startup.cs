@@ -1,12 +1,9 @@
 ﻿using ControlWorks.Logging;
+using ControlWorks.Services.Business;
 using ControlWorks.Services.Configuration;
 using Microsoft.Owin.Hosting;
+using Microsoft.Practices.Unity;
 using Owin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace ControlWorks.Service.Rest
@@ -15,8 +12,9 @@ namespace ControlWorks.Service.Rest
     {
         public void Configuration(IAppBuilder app)
         {
-            // Configure Web API for self-host. 
             var config = new HttpConfiguration();
+
+            // Configure Web API for self-host. 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",

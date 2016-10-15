@@ -1,7 +1,6 @@
 ﻿using ControlWorks.Logging;
 using ControlWorks.Service.Rest;
-using ControlWorks.Services.Configuration;
-using log4net;
+using ControlWorks.Services.Business;
 using System.Threading.Tasks;
 
 namespace ControlWorks.Service.Faspac
@@ -19,9 +18,13 @@ namespace ControlWorks.Service.Faspac
 
         public void Start()
         {
+
             Logger.Log(new LogEntry(LoggingEventType.Information, "Host: Start"));
+
+            var pviApp = ServiceLocator.GetService<IPviProcessor>();
+            var factory = new TaskFactory();
+            factory.StartNew(() => pviApp.Connect(), TaskCreationOptions.LongRunning);
             Startup.Start(Logger);
-            //var restApiTaskl = new Task(() => Startup.Start(Logger), TaskCreationOptions.LongRunning | TaskCreationOptions.PreferFairness);
         }
 
         public void Stop()

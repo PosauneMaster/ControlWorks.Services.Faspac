@@ -84,6 +84,10 @@
       <Project>{d312a083-aaea-41f7-bc3e-c8b25c788480}</Project>
       <Name>ControlWorks.Service.Rest</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ControlWorks.Services.Business\ControlWorks.Services.Business.csproj">
+      <Project>{47e3472e-a794-4093-9f63-c6522e8d3b85}</Project>
+      <Name>ControlWorks.Services.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ControlWorks.Services.Configuration\ControlWorks.Services.Configuration.csproj">
       <Project>{3e96958c-602b-4b53-be2f-686da81f852e}</Project>
       <Name>ControlWorks.Services.Configuration</Name>
