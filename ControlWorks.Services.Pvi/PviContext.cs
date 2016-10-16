@@ -1,5 +1,6 @@
 ﻿using BR.AN.PviServices;
 using ControlWorks.Logging;
+using ControlWorks.Services.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace ControlWorks.Services.Pvi
     {
 
         public Service PviService { get; private set; }
+        public CpuManager CpuService { get; private set; }
 
         private ILogger _logger;
         public PviContext() { }
@@ -26,22 +28,28 @@ namespace ControlWorks.Services.Pvi
         {
             var pviManager = new PviManager(_logger);
             pviManager.ServiceConnected += PviManager_ServiceConnected;
-            pviManager.ServiceDisconnected += PviManager_ServiceDisconnected;
-            pviManager.ServiceError += PviManager_ServiceError;
             pviManager.ConnectPvi();
-        }
-
-        private void PviManager_ServiceError(object sender, PviEventArgs e)
-        {
-        }
-
-        private void PviManager_ServiceDisconnected(object sender, PviEventArgs e)
-        {
         }
 
         private void PviManager_ServiceConnected(object sender, PviEventArgs e)
         {
             PviService = sender as Service;
+
+            var settingFile = ConfigurationProvider.CpuSettingsFile;
+            var collection = new CpuInfoCollection();
+
+            try
+            {
+                collection.Open(settingFile);
+                CpuService = new CpuManager(PviService);
+                CpuService.LoadCpuCollection(collection.GetAll());
+            }
+            catch(System.Exception ex)
+            {
+                _logger.Log(new LogEntry(LoggingEventType.Error, "Error Loading Cpu Settings", ex));
+            }
+
+
         }
     }
 }

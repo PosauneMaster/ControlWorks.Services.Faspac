@@ -21,8 +21,6 @@ namespace ControlWorks.Services.Pvi
         public Service PviService { get; set; }
 
         public event EventHandler<PviEventArgs> ServiceConnected;
-        public event EventHandler<PviEventArgs> ServiceDisconnected;
-        public event EventHandler<PviEventArgs> ServiceError;
 
         public PviManager() { }
         public PviManager(ILogger logger)
@@ -43,12 +41,14 @@ namespace ControlWorks.Services.Pvi
 
         private void PviService_Error(object sender, PviEventArgs e)
         {
-            throw new NotImplementedException();
+            var pviEventMsg = FormatPviEventMessage("PviService_Error", e);
+            log.Log(new LogEntry(LoggingEventType.Error, pviEventMsg));
         }
 
         private void PviService_Disconnected(object sender, PviEventArgs e)
         {
-            throw new NotImplementedException();
+            var pviEventMsg = FormatPviEventMessage("PviService_Disconnected", e);
+            log.Log(new LogEntry(LoggingEventType.Error, pviEventMsg));
         }
 
         private void PviService_Connected(object sender, PviEventArgs e)

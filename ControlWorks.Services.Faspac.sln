@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlWorks.Services.Busin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlWorks.Services.Data", "ControlWorks.Services.Data\ControlWorks.Services.Data.csproj", "{E67C23D9-3EF7-4723-9C0F-9A3C5B70D0A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHarness", "TestHarness\TestHarness.csproj", "{4D284B58-A87F-49D0-BE47-210120779AF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{E67C23D9-3EF7-4723-9C0F-9A3C5B70D0A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E67C23D9-3EF7-4723-9C0F-9A3C5B70D0A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E67C23D9-3EF7-4723-9C0F-9A3C5B70D0A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D284B58-A87F-49D0-BE47-210120779AF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D284B58-A87F-49D0-BE47-210120779AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D284B58-A87F-49D0-BE47-210120779AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D284B58-A87F-49D0-BE47-210120779AF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

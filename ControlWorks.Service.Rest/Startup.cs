@@ -1,8 +1,6 @@
 ﻿using ControlWorks.Logging;
-using ControlWorks.Services.Business;
 using ControlWorks.Services.Configuration;
 using Microsoft.Owin.Hosting;
-using Microsoft.Practices.Unity;
 using Owin;
 using System.Web.Http;
 

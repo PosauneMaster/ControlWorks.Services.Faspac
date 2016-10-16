@@ -1,7 +1,9 @@
 ﻿using ControlWorks.Logging;
+using ControlWorks.Services.Configuration;
 using ControlWorks.Services.Data;
 using log4net;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace ControlWorks.Services.Pvi
@@ -32,6 +34,28 @@ namespace ControlWorks.Services.Pvi
             _context = new PviContext(_logger);
             _connectionTime = DateTime.Now;
             Application.Run(_context);
+        }
+
+        public List<CpuDetail> GetCpuDetails()
+        {
+            var settingFile = ConfigurationProvider.CpuSettingsFile;
+            var collection = new CpuInfoCollection();
+
+            try
+            {
+                var cpuSettings = collection.Open(settingFile);
+
+                foreach (var cpu in _context.PviService.Cpus)
+                {
+
+                }
+
+            }
+            catch
+            {
+
+            }
+            return null;
         }
 
         public ServiceDetail GetServiceDetails()
