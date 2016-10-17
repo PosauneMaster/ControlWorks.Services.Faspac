@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CpuApi.cs" />
     <Compile Include="CpuInfo.cs" />
     <Compile Include="CpuManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

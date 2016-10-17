@@ -1,5 +1,5 @@
-﻿using ControlWorks.Logging;
-using ControlWorks.Services.Configuration;
+﻿using BR.AN.PviServices;
+using ControlWorks.Logging;
 using ControlWorks.Services.Data;
 using log4net;
 using System;
@@ -12,13 +12,16 @@ namespace ControlWorks.Services.Pvi
     {
         void Connect();
         ServiceDetail GetServiceDetails();
+        System.Threading.Tasks.Task<List<CpuDetailResponse>> GetCpuDetails();
+        CpuDetailResponse GetCpuByName(string name);
+        CpuDetailResponse GetCpuByIp(string ip);
+        void AddCpu(CpuInfo info);
     }
 
     public class PviApplication : IPviApplication
     {
         PviContext _context;
         DateTime _connectionTime;
-
 
         private ILogger _logger;
 
@@ -36,26 +39,32 @@ namespace ControlWorks.Services.Pvi
             Application.Run(_context);
         }
 
-        public List<CpuDetail> GetCpuDetails()
+        public CpuDetailResponse GetCpuByName(string name)
         {
-            var settingFile = ConfigurationProvider.CpuSettingsFile;
-            var collection = new CpuInfoCollection();
+            var api = new CpuApi(_context.PviService.Cpus);
+            return api.FindByName(name);
+        }
 
-            try
+        public async System.Threading.Tasks.Task<List<CpuDetailResponse>> GetCpuDetails()
+        {
+            var api = new CpuApi(_context.PviService.Cpus);
+
+            return await System.Threading.Tasks.Task.FromResult(api.GetAll());
+        }
+
+        public CpuDetailResponse GetCpuByIp(string ip)
+        {
+            var api = new CpuApi(_context.PviService.Cpus);
+            return api.FindByIp(ip);
+        }
+
+        public void AddCpu(CpuInfo info)
+        {
+            var api = new CpuApi();
+            if (api.Add(info))
             {
-                var cpuSettings = collection.Open(settingFile);
-
-                foreach (var cpu in _context.PviService.Cpus)
-                {
-
-                }
-
+                _context.LoadCpu(info);
             }
-            catch
-            {
-
-            }
-            return null;
         }
 
         public ServiceDetail GetServiceDetails()

@@ -48,8 +48,11 @@ namespace ControlWorks.Services.Pvi
             {
                 _logger.Log(new LogEntry(LoggingEventType.Error, "Error Loading Cpu Settings", ex));
             }
+        }
 
-
+        public void LoadCpu(CpuInfo info)
+        {
+            CpuService.CreateCpu(info.Name, info.IpAddress);
         }
     }
 }

@@ -21,10 +21,10 @@ namespace ControlWorks.Service.Faspac
 
             Logger.Log(new LogEntry(LoggingEventType.Information, "Host: Start"));
 
-            var pviApp = ServiceLocator.GetService<IPviProcessor>();
+            var pviApp = WebApiApplication.Locator.GetInstance<IPviProcessor>();
             var factory = new TaskFactory();
             factory.StartNew(() => pviApp.Connect(), TaskCreationOptions.LongRunning);
-            Startup.Start(Logger);
+            WebApiApplication.Start(Logger);
         }
 
         public void Stop()

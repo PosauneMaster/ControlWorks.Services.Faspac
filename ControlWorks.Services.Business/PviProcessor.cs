@@ -16,8 +16,6 @@ namespace ControlWorks.Services.Business
     {
         IPviApplication _pviApplication;
 
-        public PviProcessor() { }
-
         public PviProcessor(IPviApplication pviApplication)
         {
             _pviApplication = pviApplication;

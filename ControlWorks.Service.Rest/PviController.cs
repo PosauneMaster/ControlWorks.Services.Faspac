@@ -1,4 +1,5 @@
-﻿using ControlWorks.Services.Business;
+﻿using ControlWorks.Logging;
+using ControlWorks.Services.Business;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -12,7 +13,8 @@ namespace ControlWorks.Service.Rest
         {
             try
             {
-                var requestPricessor = ServiceLocator.GetService<IRequestProcessor>();
+                var requestPricessor = WebApiApplication.Locator.GetInstance<IRequestProcessor>();
+
                 var details = requestPricessor.GetServiceDetails();
 
                 if (details == null)
@@ -25,7 +27,9 @@ namespace ControlWorks.Service.Rest
             }
             catch (Exception ex)
             {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
+                ex.Data.Add("PviController.Operation", "GetDetails");
+                WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
             }
         }
     }
