@@ -49,7 +49,7 @@ namespace ControlWorks.Services.Pvi
         {
             var api = new CpuApi(_context.PviService.Cpus);
 
-            return await System.Threading.Tasks.Task.FromResult(api.GetAll());
+            return await System.Threading.Tasks.Task.Run(() => api.GetAll());
         }
 
         public CpuDetailResponse GetCpuByIp(string ip)

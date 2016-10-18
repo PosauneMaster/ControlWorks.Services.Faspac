@@ -1,5 +1,8 @@
-﻿using ControlWorks.Services.Data;
+﻿using ControlWorks.Logging;
+using ControlWorks.Services.Data;
 using ControlWorks.Services.Pvi;
+using log4net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +23,7 @@ namespace ControlWorks.Services.Business
     public class RequestProcessor : IRequestProcessor
     {
         IPviApplication _application;
+        ILogger logger = new Log4netAdapter(LogManager.GetLogger("ServiceLogger"));
 
         public RequestProcessor() { }
 
@@ -29,11 +33,23 @@ namespace ControlWorks.Services.Business
         }
         public ServiceDetail GetServiceDetails()
         {
-            return _application.GetServiceDetails();
+            logger.Log(new LogEntry(LoggingEventType.Information, "RequestProcessor Operation=GetServiceDetails"));
+
+            var result = _application.GetServiceDetails();
+
+            logger.Log(new LogEntry(LoggingEventType.Debug, ToJson(result)));
+
+            return result;
         }
         public async Task<List<CpuDetailResponse>> GetCpuDetails()
         {
-            return await _application.GetCpuDetails();
+            logger.Log(new LogEntry(LoggingEventType.Information, "RequestProcessor Operation=GetCpuDetails"));
+
+            var result = await _application.GetCpuDetails();
+
+            logger.Log(new LogEntry(LoggingEventType.Debug, ToJson(result)));
+
+            return result;
         }
 
         public CpuDetailResponse GetCpuByName(string name)
@@ -56,6 +72,15 @@ namespace ControlWorks.Services.Business
             };
 
             _application.AddCpu(info);
+        }
+
+        private string ToJson(object obj)
+        {
+            try
+            {
+                return JsonConvert.SerializeObject(obj);
+            }
+            catch { return String.Empty; }
         }
     }
 }

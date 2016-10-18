@@ -59,8 +59,11 @@ namespace ControlWorks.Logging
                 m_Adaptee.Warn(entry.Message, entry.Exception);
             else if (entry.Severity == LoggingEventType.Error)
                 m_Adaptee.Error(entry.Message, entry.Exception);
+            else if (entry.Severity == LoggingEventType.Debug)
+                m_Adaptee.Debug(entry.Message, entry.Exception);
+
             else
-                m_Adaptee.Fatal(entry.Message, entry.Exception);
+                m_Adaptee.Info(entry.Message, entry.Exception);
         }
     }
 }
