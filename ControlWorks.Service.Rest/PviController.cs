@@ -20,7 +20,7 @@ namespace ControlWorks.Service.Rest
                 if (details == null)
                 {
                     var message = "Pvi Service not found";
-                    return  ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, message));
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, message));
                 }
 
                 return Ok(details);

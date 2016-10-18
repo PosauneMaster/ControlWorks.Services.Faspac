@@ -4,6 +4,7 @@ using ControlWorks.Services.Data;
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace ControlWorks.Service.Rest
@@ -12,13 +13,13 @@ namespace ControlWorks.Service.Rest
     {
 
         [HttpGet]
-        public IHttpActionResult GetDetails()
+        public async Task<IHttpActionResult> GetDetails()
         {
             try
             {
                 var requestProcessor = WebApiApplication.Locator.GetInstance<IRequestProcessor>();
 
-                var details = requestProcessor.GetCpuDetails();
+                var details = await requestProcessor.GetCpuDetails();
 
                 if (details == null)
                 {

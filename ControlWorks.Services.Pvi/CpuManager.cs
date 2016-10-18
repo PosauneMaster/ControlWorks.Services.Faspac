@@ -17,8 +17,6 @@ namespace ControlWorks.Services.Pvi
         private ILogger _logger;
         private Service _service;
 
-        public event EventHandler<PviEventArgs> CpuConnected;
-
         public CpuManager(Service service)
         {
             _logger = new Log4netAdapter(LogManager.GetLogger("ServiceLogger"));

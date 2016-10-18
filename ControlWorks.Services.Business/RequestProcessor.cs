@@ -11,7 +11,7 @@ namespace ControlWorks.Services.Business
     public interface IRequestProcessor
     {
         ServiceDetail GetServiceDetails();
-        List<CpuDetailResponse> GetCpuDetails();
+        Task<List<CpuDetailResponse>> GetCpuDetails();
         CpuDetailResponse GetCpuByName(string name);
         CpuDetailResponse GetCpuByIp(string ip);
         void Add(CpuInfoRequest request);
@@ -31,9 +31,9 @@ namespace ControlWorks.Services.Business
         {
             return _application.GetServiceDetails();
         }
-        public List<CpuDetailResponse> GetCpuDetails()
+        public async Task<List<CpuDetailResponse>> GetCpuDetails()
         {
-            return _application.GetCpuDetails();
+            return await _application.GetCpuDetails();
         }
 
         public CpuDetailResponse GetCpuByName(string name)
