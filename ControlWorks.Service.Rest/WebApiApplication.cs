@@ -10,13 +10,8 @@ namespace ControlWorks.Service.Rest
 {
     public class WebApiApplication
     {
-        public static TypeRepository Locator { get; protected set; }
-        public static ILogger Logger { get; protected set; }
-
-        static WebApiApplication()
-        {
-            Locator = new TypeRepository();
-        }
+        public static TypeRepository Locator { get; set; }
+        public static ILogger Logger { get; set; }
 
         public void Configuration(IAppBuilder app)
         {
@@ -40,9 +35,8 @@ namespace ControlWorks.Service.Rest
             app.UseWebApi(config);
         }
 
-        public static void Start(ILogger logger)
+        public static void Start()
         {
-            Logger = logger;
             var hostUrl = $"http://*:{ConfigurationProvider.Port}";
             Logger.Log(new LogEntry(LoggingEventType.Information, $"Starting WebApi at host {hostUrl}"));
 

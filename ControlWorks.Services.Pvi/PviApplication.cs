@@ -1,21 +1,21 @@
-﻿using BR.AN.PviServices;
-using ControlWorks.Logging;
+﻿using ControlWorks.Logging;
 using ControlWorks.Services.Data;
 using log4net;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace ControlWorks.Services.Pvi
 {
     public interface IPviApplication
     {
         void Connect();
-        ServiceDetail GetServiceDetails();
-        System.Threading.Tasks.Task<List<CpuDetailResponse>> GetCpuDetails();
-        CpuDetailResponse GetCpuByName(string name);
-        CpuDetailResponse GetCpuByIp(string ip);
-        void AddCpu(CpuInfo info);
+        Task<ServiceDetail> GetServiceDetails();
+        Task<List<CpuDetailResponse>> GetCpuDetails();
+        Task<CpuDetailResponse> GetCpuByName(string name);
+        Task<CpuDetailResponse> GetCpuByIp(string ip);
+        Task AddCpu(CpuInfo info);
     }
 
     public class PviApplication : IPviApplication
@@ -39,46 +39,51 @@ namespace ControlWorks.Services.Pvi
             Application.Run(_context);
         }
 
-        public CpuDetailResponse GetCpuByName(string name)
-        {
-            var api = new CpuApi(_context.PviService.Cpus);
-            return api.FindByName(name);
-        }
-
-        public async System.Threading.Tasks.Task<List<CpuDetailResponse>> GetCpuDetails()
+        public async Task<CpuDetailResponse> GetCpuByName(string name)
         {
             var api = new CpuApi(_context.PviService.Cpus);
 
-            return await System.Threading.Tasks.Task.Run(() => api.GetAll());
+            return await Task.Run(() => api.FindByName(name));
         }
 
-        public CpuDetailResponse GetCpuByIp(string ip)
+        public async Task<List<CpuDetailResponse>> GetCpuDetails()
         {
             var api = new CpuApi(_context.PviService.Cpus);
-            return api.FindByIp(ip);
+
+            return await Task.Run(() => api.GetAll());
         }
 
-        public void AddCpu(CpuInfo info)
+        public async Task<CpuDetailResponse> GetCpuByIp(string ip)
+        {
+            var api = new CpuApi(_context.PviService.Cpus);
+
+            return await Task.Run(() => api.FindByIp(ip));
+        }
+
+        public async Task AddCpu(CpuInfo info)
         {
             var api = new CpuApi();
-            if (api.Add(info))
-            {
-                _context.LoadCpu(info);
-            }
+
+            await Task.Run(() => api.Add(info));
         }
 
-        public ServiceDetail GetServiceDetails()
+        public async Task<ServiceDetail> GetServiceDetails()
         {
-            var details = new ServiceDetail()
-            {
-                Name = _context.PviService.Name,
-                IsConnected = _context.PviService.IsConnected,
-                Cpus = _context.PviService.Cpus.Count,
-                ConnectTime = _connectionTime,
-                License = _context.PviService.LicenceInfo.ToString()
-            };
+            var service = _context.PviService;
 
-            return details;
+            var detail = await Task.Run(() =>
+                {
+                    return new ServiceDetail()
+                    {
+                        Name = service.Name,
+                        IsConnected = service.IsConnected,
+                        Cpus = service.Cpus.Count,
+                        ConnectTime = _connectionTime,
+                        License = service.LicenceInfo.ToString()
+                    };
+                 });
+
+            return detail;
         }
     }
 }

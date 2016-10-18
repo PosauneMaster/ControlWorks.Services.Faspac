@@ -14,6 +14,8 @@ namespace ControlWorks.Services.Pvi
         List<CpuDetailResponse> GetAll();
         CpuDetailResponse FindByName(string name);
         CpuDetailResponse FindByIp(string ip);
+        bool Add(CpuInfo info);
+        bool Update(CpuInfo info);
     }
 
     public class CpuApi : ICpuApi
@@ -81,6 +83,16 @@ namespace ControlWorks.Services.Pvi
         }
 
         public bool Add(CpuInfo info)
+        {
+            return AddOrUpdate(info);
+        }
+
+        public bool Update(CpuInfo info)
+        {
+            return AddOrUpdate(info);
+        }
+
+        private bool AddOrUpdate(CpuInfo info)
         {
             var settings = GetSettings();
             settings.AddOrUpdate(info);

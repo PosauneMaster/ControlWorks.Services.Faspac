@@ -17,7 +17,6 @@ namespace ControlWorks.Services.Business
         {
             _locator = new UnityServiceLocator(ConfigureUnityContainer());
             ServiceLocator.SetLocatorProvider(() => _locator);
-
         }
 
         private IUnityContainer ConfigureUnityContainer()

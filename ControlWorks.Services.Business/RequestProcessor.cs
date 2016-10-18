@@ -5,20 +5,17 @@ using log4net;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ControlWorks.Services.Business
 {
     public interface IRequestProcessor
     {
-        ServiceDetail GetServiceDetails();
+        Task<ServiceDetail> GetServiceDetails();
         Task<List<CpuDetailResponse>> GetCpuDetails();
-        CpuDetailResponse GetCpuByName(string name);
-        CpuDetailResponse GetCpuByIp(string ip);
-        void Add(CpuInfoRequest request);
-
+        Task<CpuDetailResponse> GetCpuByName(string name);
+        Task<CpuDetailResponse> GetCpuByIp(string ip);
+        Task Add(CpuInfoRequest request);
     }
     public class RequestProcessor : IRequestProcessor
     {
@@ -31,11 +28,11 @@ namespace ControlWorks.Services.Business
         {
             _application = application;
         }
-        public ServiceDetail GetServiceDetails()
+        public async Task<ServiceDetail> GetServiceDetails()
         {
             logger.Log(new LogEntry(LoggingEventType.Information, "RequestProcessor Operation=GetServiceDetails"));
 
-            var result = _application.GetServiceDetails();
+            var result = await _application.GetServiceDetails();
 
             logger.Log(new LogEntry(LoggingEventType.Debug, ToJson(result)));
 
@@ -52,17 +49,30 @@ namespace ControlWorks.Services.Business
             return result;
         }
 
-        public CpuDetailResponse GetCpuByName(string name)
+        public async Task<CpuDetailResponse> GetCpuByName(string name)
         {
-            return _application.GetCpuByName(name);
+            logger.Log(new LogEntry(LoggingEventType.Information, $"RequestProcessor Operation=GetCpuByName Name={name}"));
+
+            var result = await _application.GetCpuByName(name);
+
+            logger.Log(new LogEntry(LoggingEventType.Debug, ToJson(result)));
+
+            return result;
+
         }
 
-        public CpuDetailResponse GetCpuByIp(string ip)
+        public async Task<CpuDetailResponse> GetCpuByIp(string ip)
         {
-            return _application.GetCpuByIp(ip);
+            logger.Log(new LogEntry(LoggingEventType.Information, $"RequestProcessor Operation=GetCpuByIp IP={ip}"));
+
+            var result = await _application.GetCpuByIp(ip);
+
+            logger.Log(new LogEntry(LoggingEventType.Debug, ToJson(result)));
+
+            return result;
         }
 
-        public void Add(CpuInfoRequest request)
+        public async Task Add(CpuInfoRequest request)
         {
             var info = new CpuInfo()
             {
@@ -71,7 +81,9 @@ namespace ControlWorks.Services.Business
                 IpAddress = request.IpAddress
             };
 
-            _application.AddCpu(info);
+            logger.Log(new LogEntry(LoggingEventType.Information, $"RequestProcessor Operation=Add request={ToJson(request)}"));
+
+            await _application.AddCpu(info);
         }
 
         private string ToJson(object obj)

@@ -38,13 +38,13 @@ namespace ControlWorks.Service.Rest
         }
 
         [HttpGet]
-        public IHttpActionResult FindByName(string id)
+        public async Task<IHttpActionResult> FindByName(string id)
         {
             try
             {
                 var requestProcessor = WebApiApplication.Locator.GetInstance<IRequestProcessor>();
 
-                var details = requestProcessor.GetCpuByName(id);
+                var details = await requestProcessor.GetCpuByName(id);
 
                 if (details == null)
                 {
@@ -63,13 +63,13 @@ namespace ControlWorks.Service.Rest
         }
 
         [HttpGet]
-        public IHttpActionResult FindByIp(string id)
+        public async Task<IHttpActionResult> FindByIp(string id)
         {
             try
             {
                 var requestProcessor = WebApiApplication.Locator.GetInstance<IRequestProcessor>();
 
-                var details = requestProcessor.GetCpuByIp(id);
+                var details = await requestProcessor.GetCpuByIp(id);
 
                 if (details == null)
                 {
@@ -88,13 +88,13 @@ namespace ControlWorks.Service.Rest
         }
 
         [HttpPost]
-        public IHttpActionResult Add(CpuInfoRequest info)
+        public async Task<IHttpActionResult> Add(CpuInfoRequest info)
         {
             try
             {
                 var requestProcessor = WebApiApplication.Locator.GetInstance<IRequestProcessor>();
 
-                requestProcessor.Add(info);
+                await requestProcessor.Add(info);
 
                 return Ok();
             }

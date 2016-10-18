@@ -3,19 +3,20 @@ using ControlWorks.Services.Business;
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace ControlWorks.Service.Rest
 {
     public class PviController : ApiController
     {
-        public IHttpActionResult GetDetails()
+        public async Task<IHttpActionResult> GetDetails()
         {
             try
             {
                 var requestPricessor = WebApiApplication.Locator.GetInstance<IRequestProcessor>();
 
-                var details = requestPricessor.GetServiceDetails();
+                var details = await requestPricessor.GetServiceDetails();
 
                 if (details == null)
                 {

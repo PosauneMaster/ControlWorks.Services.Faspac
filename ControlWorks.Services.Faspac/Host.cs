@@ -18,13 +18,17 @@ namespace ControlWorks.Service.Faspac
 
         public void Start()
         {
-
             Logger.Log(new LogEntry(LoggingEventType.Information, "Host: Start"));
 
-            var pviApp = WebApiApplication.Locator.GetInstance<IPviProcessor>();
+            var locator = new TypeRepository();
+
+            var pviApp = locator.GetInstance<IPviProcessor>();
             var factory = new TaskFactory();
             factory.StartNew(() => pviApp.Connect(), TaskCreationOptions.LongRunning);
-            WebApiApplication.Start(Logger);
+
+            WebApiApplication.Locator = locator;
+            WebApiApplication.Logger = Logger;
+            WebApiApplication.Start();
         }
 
         public void Stop()
