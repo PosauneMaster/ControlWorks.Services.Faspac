@@ -16,6 +16,9 @@ namespace ControlWorks.Services.Pvi
         Task<CpuDetailResponse> GetCpuByName(string name);
         Task<CpuDetailResponse> GetCpuByIp(string ip);
         Task AddCpu(CpuInfo info);
+        Task UpdateCpu(CpuInfo info);
+        Task DeleteCpuByName(string name);
+        Task DeleteCpuByIp(string ip);
     }
 
     public class PviApplication : IPviApplication
@@ -64,8 +67,49 @@ namespace ControlWorks.Services.Pvi
         {
             var api = new CpuApi();
 
-            await Task.Run(() => api.Add(info));
+            await Task.Run(() =>
+            {
+                api.Add(info);
+                _context.CpuService.CreateCpu(info.Name, info.IpAddress);
+            });
         }
+
+        public async Task UpdateCpu(CpuInfo info)
+        {
+            var api = new CpuApi();
+
+            await Task.Run(() =>
+            {
+                api.Update(info);
+                _context.CpuService.CreateCpu(info.Name, info.IpAddress);
+            });
+        }
+
+        public async Task DeleteCpuByName(string name)
+        {
+            var api = new CpuApi();
+            await Task.Run(() =>
+            {
+                if (api.RemoveByName(name))
+                {
+                    _context.CpuService.DisconnectCpu(name);
+                }
+            });
+        }
+
+        public async Task DeleteCpuByIp(string ip)
+        {
+            var api = new CpuApi();
+            await Task.Run(() =>
+            {
+                var cpu = api.FindByIp(ip);
+                if (api.RemoveByIp(ip))
+                {
+                    _context.CpuService.DisconnectCpu(cpu.Name);
+                }
+            });
+        }
+
 
         public async Task<ServiceDetail> GetServiceDetails()
         {

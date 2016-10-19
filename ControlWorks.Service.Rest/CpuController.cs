@@ -56,7 +56,7 @@ namespace ControlWorks.Service.Rest
             }
             catch (Exception ex)
             {
-                ex.Data.Add("PviController.Operation", "GetDetails");
+                ex.Data.Add("PviController.Operation", "FindByName");
                 WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
             }
@@ -81,7 +81,7 @@ namespace ControlWorks.Service.Rest
             }
             catch (Exception ex)
             {
-                ex.Data.Add("PviController.Operation", "GetDetails");
+                ex.Data.Add("PviController.Operation", "FindByIp");
                 WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
             }
@@ -100,13 +100,68 @@ namespace ControlWorks.Service.Rest
             }
             catch (Exception ex)
             {
-                ex.Data.Add("PviController.Operation", "GetDetails");
+                ex.Data.Add("PviController.Operation", "Add");
                 WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
             }
         }
 
+        [HttpPut]
+        public async Task<IHttpActionResult> Update(CpuInfoRequest info)
+        {
+            try
+            {
+                var requestProcessor = WebApiApplication.Locator.GetInstance<IRequestProcessor>();
 
+                await requestProcessor.Update(info);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("PviController.Operation", "Update");
+                WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IHttpActionResult> DeleteByIp(string id)
+        {
+            try
+            {
+                var requestProcessor = WebApiApplication.Locator.GetInstance<IRequestProcessor>();
+
+                await requestProcessor.DeleteCpuByIp(id);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("PviController.Operation", "DeleteByIp");
+                WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IHttpActionResult> DeleteByName(string id)
+        {
+            try
+            {
+                var requestProcessor = WebApiApplication.Locator.GetInstance<IRequestProcessor>();
+
+                await requestProcessor.DeleteCpuByName(id);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("PviController.Operation", "DeleteByName");
+                WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
+            }
+        }
     }
 }
 

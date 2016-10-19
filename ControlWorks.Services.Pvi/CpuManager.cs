@@ -38,14 +38,10 @@ namespace ControlWorks.Services.Pvi
             Cpu cpu = null;
             if (_service.Cpus.ContainsKey(name))
             {
-                _disconnectWaitHandle = new AutoResetEvent(false);
 
                 _logger.Log(new LogEntry(LoggingEventType.Information, $"A Cpu with the name {name} already exists. Disconnecting and updating"));
                 cpu = _service.Cpus[name];
-                cpu.Disconnect();
-                _disconnectWaitHandle.WaitOne(1000);
-                _disconnectWaitHandle.Dispose();
-                _disconnectWaitHandle = null;
+                DisconnectCpu(name);
             }
             else
             {
@@ -62,6 +58,34 @@ namespace ControlWorks.Services.Pvi
 
             cpu.Connect();
 
+        }
+
+        public void DisconnectCpu(string name)
+        {
+            if (_service.Cpus.ContainsKey(name))
+            {
+
+                _logger.Log(new LogEntry(LoggingEventType.Information, $"CpuManager.DisconnectCpu Name={name}"));
+
+                Cpu cpu = _service.Cpus[name];
+
+                if (cpu.IsConnected)
+                {
+                    _disconnectWaitHandle = new AutoResetEvent(false);
+
+                    cpu.Disconnect();
+
+                    _disconnectWaitHandle.WaitOne(1000);
+                    _disconnectWaitHandle.Dispose();
+                    _disconnectWaitHandle = null;
+                }
+
+                _service.Cpus.Remove(cpu.Name);
+            }
+            else
+            {
+                _logger.Log(new LogEntry(LoggingEventType.Information, $"CpuManager.DisconnectCpu Name={name} Not found"));
+            }
         }
 
         private void cpu_Connected(object sender, PviEventArgs e)
@@ -91,6 +115,7 @@ namespace ControlWorks.Services.Pvi
                 cpu.Connected -= cpu_Connected;
                 cpu.Error -= cpu_Error;
                 cpu.Disconnected -= cpu_Disconnected;
+
             }
 
             if (_disconnectWaitHandle != null)

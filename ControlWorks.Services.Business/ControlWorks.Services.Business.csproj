@@ -68,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PviProcessor.cs" />
     <Compile Include="RequestProcessor.cs" />
+    <Compile Include="SystemRequestProcessor.cs" />
     <Compile Include="TypeRepository.cs" />
   </ItemGroup>
   <ItemGroup>

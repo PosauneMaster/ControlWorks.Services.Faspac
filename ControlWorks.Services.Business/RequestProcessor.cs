@@ -16,6 +16,10 @@ namespace ControlWorks.Services.Business
         Task<CpuDetailResponse> GetCpuByName(string name);
         Task<CpuDetailResponse> GetCpuByIp(string ip);
         Task Add(CpuInfoRequest request);
+        Task Update(CpuInfoRequest request);
+        Task DeleteCpuByName(string name);
+        Task DeleteCpuByIp(string ip);
+
     }
     public class RequestProcessor : IRequestProcessor
     {
@@ -84,6 +88,34 @@ namespace ControlWorks.Services.Business
             logger.Log(new LogEntry(LoggingEventType.Information, $"RequestProcessor Operation=Add request={ToJson(request)}"));
 
             await _application.AddCpu(info);
+        }
+
+        public async Task Update(CpuInfoRequest request)
+        {
+            var info = new CpuInfo()
+            {
+                Name = request.Name,
+                Description = request.Description,
+                IpAddress = request.IpAddress
+            };
+
+            logger.Log(new LogEntry(LoggingEventType.Information, $"RequestProcessor Operation=Update request={ToJson(request)}"));
+
+            await _application.UpdateCpu(info);
+        }
+
+        public async Task DeleteCpuByName(string name)
+        {
+            logger.Log(new LogEntry(LoggingEventType.Information, $"RequestProcessor Operation=DeleteCpuByName name={name}"));
+
+            await _application.DeleteCpuByName(name);
+        }
+
+        public async Task DeleteCpuByIp(string ip)
+        {
+            logger.Log(new LogEntry(LoggingEventType.Information, $"RequestProcessor Operation=DeleteCpuByIp name={ip}"));
+
+            await _application.DeleteCpuByIp(ip);
         }
 
         private string ToJson(object obj)

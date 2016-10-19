@@ -16,6 +16,9 @@ namespace ControlWorks.Services.Pvi
         CpuDetailResponse FindByIp(string ip);
         bool Add(CpuInfo info);
         bool Update(CpuInfo info);
+        bool RemoveByName(string name);
+        bool RemoveByIp(string ip);
+
     }
 
     public class CpuApi : ICpuApi
@@ -97,6 +100,32 @@ namespace ControlWorks.Services.Pvi
             var settings = GetSettings();
             settings.AddOrUpdate(info);
             return settings.Save(ConfigurationProvider.CpuSettingsFile);
+        }
+
+        public bool RemoveByName(string name)
+        {
+            var settings = GetSettings();
+            var cpu = settings.FindByName(name);
+            if (cpu != null)
+            {
+                settings.Remove(cpu);
+                settings.Save(ConfigurationProvider.CpuSettingsFile);
+                return true;
+            }
+            return false;
+        }
+
+        public bool RemoveByIp(string ip)
+        {
+            var settings = GetSettings();
+            var cpu = settings.FindByIp(ip);
+            if (cpu != null)
+            {
+                settings.Remove(cpu);
+                settings.Save(ConfigurationProvider.CpuSettingsFile);
+                return true;
+            }
+            return false;
         }
 
 
