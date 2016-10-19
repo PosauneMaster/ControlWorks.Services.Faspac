@@ -11,10 +11,8 @@ namespace ControlWorks.Service.Faspac
     {
         static void Main(string[] args)
         {
-            ILog log = LogManager.GetLogger(ConfigurationProvider.ServiceLoggerName);
-            log.Info("Hello");
 
-            ILogger logger = new Log4netAdapter(LogManager.GetLogger("ServiceLogger"));
+            ILogger logger = new Log4netAdapter(LogManager.GetLogger(ConfigurationProvider.ServiceLoggerName));
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 

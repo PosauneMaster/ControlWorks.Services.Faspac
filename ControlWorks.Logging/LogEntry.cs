@@ -1,4 +1,7 @@
-﻿using System;
+﻿using log4net;
+using log4net.Appender;
+using log4net.Repository.Hierarchy;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +14,7 @@ namespace ControlWorks.Logging
     public interface ILogger
     {
         void Log(LogEntry entry);
+        string GetLogFileName();
     }
 
     public enum LoggingEventType { Debug, Information, Warning, Error, Fatal };
@@ -44,11 +48,20 @@ namespace ControlWorks.Logging
 
     public class Log4netAdapter : ILogger
     {
-        private readonly log4net.ILog m_Adaptee;
+        private readonly ILog m_Adaptee;
 
         public Log4netAdapter(log4net.ILog adaptee)
         {
             m_Adaptee = adaptee;
+        }
+
+        public string GetLogFileName()
+        {
+            var rootAppender = m_Adaptee.Logger.Repository.GetAppenders().OfType<RollingFileAppender>().FirstOrDefault();
+
+            string filename = rootAppender != null ? rootAppender.File : string.Empty;
+
+            return filename;
         }
 
         public void Log(LogEntry entry)

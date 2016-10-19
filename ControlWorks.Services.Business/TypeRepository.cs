@@ -1,4 +1,5 @@
-﻿using ControlWorks.Services.Pvi;
+﻿using ControlWorks.Services.Configuration;
+using ControlWorks.Services.Pvi;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
 
@@ -26,6 +27,9 @@ namespace ControlWorks.Services.Business
             container.RegisterType<IRequestProcessor, RequestProcessor>(new ContainerControlledLifetimeManager());
             container.RegisterType<IPviApplication, PviApplication>(new ContainerControlledLifetimeManager());
             container.RegisterType<IPviProcessor, PviProcessor>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IConfigurationSettings, ConfigurationSettings>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IConfigurationProcessor, ConfigurationProcessor>(new ContainerControlledLifetimeManager());
+            
 
             return container;
         }

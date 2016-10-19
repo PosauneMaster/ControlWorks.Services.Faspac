@@ -1,4 +1,5 @@
-﻿using ControlWorks.Logging;
+﻿using System;
+using ControlWorks.Logging;
 using ControlWorks.Services.Business;
 using System;
 using System.Net;
@@ -8,30 +9,30 @@ using System.Web.Http;
 
 namespace ControlWorks.Service.Rest
 {
-    public class PviController : ApiController
+    public class SettingsController : ApiController
     {
-        public async Task<IHttpActionResult> GetDetails()
+        [HttpGet]
+        public async Task<IHttpActionResult> GetSettings()
         {
             try
             {
-                var requestProcessor = WebApiApplication.Locator.GetInstance<IRequestProcessor>();
+                var configProcessor = WebApiApplication.Locator.GetInstance<IConfigurationProcessor>();
 
-                var details = await requestProcessor.GetServiceDetails();
+                var settings = await configProcessor.GetSettings();
 
-                if (details == null)
+                if (settings == null)
                 {
-                    var message = "Pvi Service not found";
+                    var message = "Settings not found";
                     return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, message));
                 }
-
-                return Ok(details);
+                return Ok(settings);
             }
             catch (Exception ex)
             {
-                ex.Data.Add("PviController.Operation", "GetDetails");
+                ex.Data.Add("SettingsController.Operation", "GetSettings");
                 WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
             }
-        }
+}
     }
 }

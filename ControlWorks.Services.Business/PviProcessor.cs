@@ -12,7 +12,7 @@ namespace ControlWorks.Services.Business
         void Connect();
     }
 
-    public class PviProcessor : IPviProcessor
+    public class PviProcessor : BaseProcessor, IPviProcessor
     {
         IPviApplication _pviApplication;
 

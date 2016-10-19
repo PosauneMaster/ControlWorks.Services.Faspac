@@ -21,7 +21,7 @@ namespace ControlWorks.Services.Business
         Task DeleteCpuByIp(string ip);
 
     }
-    public class RequestProcessor : IRequestProcessor
+    public class RequestProcessor : BaseProcessor, IRequestProcessor
     {
         IPviApplication _application;
         ILogger logger = new Log4netAdapter(LogManager.GetLogger("ServiceLogger"));
@@ -116,15 +116,6 @@ namespace ControlWorks.Services.Business
             logger.Log(new LogEntry(LoggingEventType.Information, $"RequestProcessor Operation=DeleteCpuByIp name={ip}"));
 
             await _application.DeleteCpuByIp(ip);
-        }
-
-        private string ToJson(object obj)
-        {
-            try
-            {
-                return JsonConvert.SerializeObject(obj);
-            }
-            catch { return String.Empty; }
         }
     }
 }

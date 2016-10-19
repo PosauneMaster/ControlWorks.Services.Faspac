@@ -65,10 +65,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseProcessor.cs" />
+    <Compile Include="ConfigurationProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PviProcessor.cs" />
     <Compile Include="RequestProcessor.cs" />
-    <Compile Include="SystemRequestProcessor.cs" />
     <Compile Include="TypeRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +80,10 @@
     <ProjectReference Include="..\ControlWorks.Logging\ControlWorks.Logging.csproj">
       <Project>{69fe20e8-da32-45c7-acd5-7eb2fac57245}</Project>
       <Name>ControlWorks.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ControlWorks.Services.Configuration\ControlWorks.Services.Configuration.csproj">
+      <Project>{3e96958c-602b-4b53-be2f-686da81f852e}</Project>
+      <Name>ControlWorks.Services.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\ControlWorks.Services.Data\ControlWorks.Services.Data.csproj">
       <Project>{e67c23d9-3ef7-4723-9c0f-9a3c5b70d0a2}</Project>
