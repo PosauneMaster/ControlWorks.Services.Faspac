@@ -12,7 +12,7 @@ namespace ControlWorks.Services.Configuration
         ExpandoObject GetSettings(string logFileName);
         string GetSettingFile();
         string GetConfigSource();
-        void AddConnectionString(string name, string connectionString);
+        void AddOrUpdateConnectionString(string name, string connectionString);
 
     }
     public class ConfigurationSettings : IConfigurationSettings
@@ -39,8 +39,9 @@ namespace ControlWorks.Services.Configuration
             dynamic connections = new ExpandoObject();
             var connectionsDict = (IDictionary<string, object>)connections;
 
-
-            ConnectionStringSettingsCollection collection = ConfigurationManager.ConnectionStrings;
+            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            ConnectionStringsSection connectionStringsSection = configuration.ConnectionStrings;
+            ConnectionStringSettingsCollection collection = connectionStringsSection.ConnectionStrings;
 
             if (connections != null)
             {
@@ -71,15 +72,23 @@ namespace ControlWorks.Services.Configuration
             return Path.Combine(Directory.GetCurrentDirectory(), connectionStringsSection.SectionInformation.ConfigSource);
         }
 
-        public void AddConnectionString(string name, string connectionString)
+        public void AddOrUpdateConnectionString(string name, string connectionString)
         {
             var setting = new ConnectionStringSettings(name, connectionString);
+            setting.ProviderName = "System.Data.SqlClient";
 
             var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             ConnectionStringsSection connectionStringsSection = configuration.ConnectionStrings;
+
+            if (connectionStringsSection.ConnectionStrings[name] != null)
+            {
+                var connectionStringSetting = connectionStringsSection.ConnectionStrings[name];
+                connectionStringsSection.ConnectionStrings.Remove(connectionStringSetting);
+
+            }
+
             connectionStringsSection.ConnectionStrings.Add(setting);
             configuration.Save(ConfigurationSaveMode.Minimal);
-
         }
     }
 }
