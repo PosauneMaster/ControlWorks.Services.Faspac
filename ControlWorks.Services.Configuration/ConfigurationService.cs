@@ -7,15 +7,16 @@ using System.Reflection;
 
 namespace ControlWorks.Services.Configuration
 {
-    public interface IConfigurationSettings
+    public interface IConfigurationService
     {
         ExpandoObject GetSettings(string logFileName);
         string GetSettingFile();
         string GetConfigSource();
         void AddOrUpdateConnectionString(string name, string connectionString);
+        void ChangePort(int port);
 
     }
-    public class ConfigurationSettings : IConfigurationSettings
+    public class ConfigurationService : IConfigurationService
     {
         public ExpandoObject GetSettings(string logFileName)
         {
@@ -88,7 +89,21 @@ namespace ControlWorks.Services.Configuration
             }
 
             connectionStringsSection.ConnectionStrings.Add(setting);
-            configuration.Save(ConfigurationSaveMode.Minimal);
+            configuration.Save(ConfigurationSaveMode.Modified);
+        }
+
+        public void ChangePort(int port)
+        {
+            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            AppSettingsSection appSettings = configuration.AppSettings;
+
+            if (appSettings.Settings["Port"] != null)
+            {
+                appSettings.Settings["Port"].Value = port.ToString();
+                configuration.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings");
+
+            }
         }
     }
 }

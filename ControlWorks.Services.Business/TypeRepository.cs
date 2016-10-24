@@ -27,7 +27,7 @@ namespace ControlWorks.Services.Business
             container.RegisterType<IRequestProcessor, RequestProcessor>(new ContainerControlledLifetimeManager());
             container.RegisterType<IPviApplication, PviApplication>(new ContainerControlledLifetimeManager());
             container.RegisterType<IPviProcessor, PviProcessor>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IConfigurationSettings, ConfigurationSettings>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IConfigurationService, ConfigurationService>(new ContainerControlledLifetimeManager());
             container.RegisterType<IConfigurationProcessor, ConfigurationProcessor>(new ContainerControlledLifetimeManager());
             
 

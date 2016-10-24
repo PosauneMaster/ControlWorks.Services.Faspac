@@ -119,10 +119,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppSettingsController.cs" />
     <Compile Include="CpuController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PviController.cs" />
-    <Compile Include="SettingsController.cs" />
+    <Compile Include="ConnectionController.cs" />
     <Compile Include="WebApiApplication.cs" />
   </ItemGroup>
   <ItemGroup>

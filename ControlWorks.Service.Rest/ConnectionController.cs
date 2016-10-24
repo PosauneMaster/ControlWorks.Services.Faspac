@@ -1,7 +1,6 @@
 ﻿using System;
 using ControlWorks.Logging;
 using ControlWorks.Services.Business;
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ using ControlWorks.Services.Data;
 
 namespace ControlWorks.Service.Rest
 {
-    public class SettingsController : ApiController
+    public class ConnectionController : ApiController
     {
         [HttpGet]
         public async Task<IHttpActionResult> GetSettings()
@@ -43,11 +42,11 @@ namespace ControlWorks.Service.Rest
             {
                 var configProcessor = WebApiApplication.Locator.GetInstance<IConfigurationProcessor>();
 
-                var response = await configProcessor.AddOrUpdateConnectionString(info);
+                var response = await configProcessor.Add(info);
 
                 if (response == null)
                 {
-                    var message = "Encountered and error adding Connection String";
+                    var message = "Encountered an error adding Connection String";
                     return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, message));
                 }
                 return Ok(response);
@@ -67,11 +66,11 @@ namespace ControlWorks.Service.Rest
             {
                 var configProcessor = WebApiApplication.Locator.GetInstance<IConfigurationProcessor>();
 
-                var response = await configProcessor.AddOrUpdateConnectionString(info);
+                var response = await configProcessor.Update(info);
 
                 if (response == null)
                 {
-                    var message = "Encountered and error updating Connection String";
+                    var message = "Encountered an error updating Connection String";
                     return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, message));
                 }
                 return Ok(response);
@@ -83,8 +82,5 @@ namespace ControlWorks.Service.Rest
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
             }
         }
-
-
-
     }
 }

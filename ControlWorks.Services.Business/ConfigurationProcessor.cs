@@ -16,17 +16,20 @@ namespace ControlWorks.Services.Business
     {
         Task<ExpandoObject> GetSettings();
         Task<ResponseMessage> AddOrUpdateConnectionString(ConnectionInfo data);
+        Task<ResponseMessage> Add(ConnectionInfo data);
+        Task<ResponseMessage> Update(ConnectionInfo data);
+        Task<ResponseMessage> ChangePort(int port);
 
     }
 
     public class ConfigurationProcessor : BaseProcessor, IConfigurationProcessor
     {
-        IConfigurationSettings _configurationSettings;
+        IConfigurationService _configurationService;
         ILogger _logger;
 
-        public ConfigurationProcessor(IConfigurationSettings configurationSettings)
+        public ConfigurationProcessor(IConfigurationService configurationSettings)
         {
-            _configurationSettings = configurationSettings;
+            _configurationService = configurationSettings;
 
             var loggerName = ConfigurationProvider.ServiceLoggerName;
             _logger = new Log4netAdapter(LogManager.GetLogger(loggerName));
@@ -37,18 +40,27 @@ namespace ControlWorks.Services.Business
             _logger.Log(new LogEntry(LoggingEventType.Information, "ConfigurationProcessor Operation=GetSettings"));
 
             ExpandoObject settings = null;
-            await Task.Run(() => settings = _configurationSettings.GetSettings(_logger.GetLogFileName()));
+            await Task.Run(() => settings = _configurationService.GetSettings(_logger.GetLogFileName()));
 
             _logger.Log(new LogEntry(LoggingEventType.Debug, ToJson(settings)));
 
             return settings;
         }
 
-        //public async Task<ResponseMessage> Update(ConnectionInfo data)
-        //{
-        //    ResponseMessage response;
-        //    await  AddOrUpdateConnectionString(data);
-        //}
+        public async Task<ResponseMessage> Add(ConnectionInfo data)
+        {
+            var response = await AddOrUpdateConnectionString(data);
+            response.Message = $"Connection string {data.Name} added";
+            return response;
+        }
+
+
+        public async Task<ResponseMessage> Update(ConnectionInfo data)
+        {
+            var response = await AddOrUpdateConnectionString(data);
+            response.Message = $"Connection string {data.Name} updated";
+            return response;
+        }
 
         public async Task<ResponseMessage> AddOrUpdateConnectionString(ConnectionInfo data)
         {
@@ -78,7 +90,7 @@ namespace ControlWorks.Services.Business
             builder.InitialCatalog = data.InitialCatalog;
             builder.IntegratedSecurity = data.IntegratedSecurity ?? false;
 
-            await Task.Run(() => _configurationSettings.AddOrUpdateConnectionString(data.Name, builder.ConnectionString));
+            await Task.Run(() => _configurationService.AddOrUpdateConnectionString(data.Name, builder.ConnectionString));
 
             var success = new ResponseMessage()
             {
@@ -105,6 +117,19 @@ namespace ControlWorks.Services.Business
             }
 
             return errors;
+        }
+
+        public async Task<ResponseMessage> ChangePort(int port)
+        {
+            await Task.Run(() => _configurationService.ChangePort(port));
+
+            var response = new ResponseMessage()
+            {
+                IsSuccess = true,
+                Message = $"Port changed to {port}.  Service restart is required to take effect."
+            };
+
+            return response;
         }
 
     }
