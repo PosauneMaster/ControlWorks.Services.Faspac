@@ -12,6 +12,7 @@ namespace ControlWorks.Services.Configuration
         public static string ServiceLoggerName { get; } = ConfigurationManager.AppSettings["ServiceLoggerName"] ?? "ServiceLogger";
         public static string Port { get; } = ConfigurationManager.AppSettings["Port"] ?? "8080";
         public static string CpuSettingsFile { get; } = ConfigurationManager.AppSettings["CpuSettingsFile"] ?? "cpu.config";
+        public static string VariableSettingsFile { get; } = ConfigurationManager.AppSettings["VariableSettingsFile"] ?? "variables.config";
 
     }
 }

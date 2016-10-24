@@ -50,6 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmVariables.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVariables.Designer.cs">
+      <DependentUpon>frmVariables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,6 +64,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmVariables.resx">
+      <DependentUpon>frmVariables.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -86,6 +95,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ControlWorks.Services.Configuration\ControlWorks.Services.Configuration.csproj">
+      <Project>{3E96958C-602B-4B53-BE2F-686DA81F852E}</Project>
+      <Name>ControlWorks.Services.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ControlWorks.Services.Pvi\ControlWorks.Services.Pvi.csproj">
       <Project>{be7afd30-1d56-4baa-8bef-7f4de8741796}</Project>
       <Name>ControlWorks.Services.Pvi</Name>

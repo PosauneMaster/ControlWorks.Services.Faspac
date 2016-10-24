@@ -60,6 +60,7 @@
     <Compile Include="PviContext.cs" />
     <Compile Include="PviManager.cs" />
     <Compile Include="PviMessage.cs" />
+    <Compile Include="VariableInfoCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ControlWorks.Logging\ControlWorks.Logging.csproj">
