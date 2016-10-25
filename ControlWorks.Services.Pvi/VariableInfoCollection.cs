@@ -29,6 +29,18 @@ namespace ControlWorks.Services.Pvi
             return _variableLookup.Values.ToList();
         }
 
+        public VariableInfo FindByCpu(string name)
+        {
+            if (_variableLookup.ContainsKey(name))
+            {
+                return _variableLookup[name];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public void AddRange(string cpuName, IEnumerable<string> variableNames)
         {
             foreach(var name in variableNames)

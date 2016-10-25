@@ -60,6 +60,7 @@
     <Compile Include="PviContext.cs" />
     <Compile Include="PviManager.cs" />
     <Compile Include="PviMessage.cs" />
+    <Compile Include="VariableApi.cs" />
     <Compile Include="VariableInfoCollection.cs" />
   </ItemGroup>
   <ItemGroup>

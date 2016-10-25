@@ -50,11 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionInfo.cs" />
-    <Compile Include="CpuDetail.cs" />
+    <Compile Include="CpuDetailResponse.cs" />
     <Compile Include="CpuInfoRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseMessage.cs" />
     <Compile Include="ServiceDetail.cs" />
+    <Compile Include="VariableDetailRequest.cs" />
+    <Compile Include="VariableDetailRespose.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
