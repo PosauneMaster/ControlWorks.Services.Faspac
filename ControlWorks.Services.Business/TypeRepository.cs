@@ -31,7 +31,8 @@ namespace ControlWorks.Services.Business
             container.RegisterType<IConfigurationProcessor, ConfigurationProcessor>(new ContainerControlledLifetimeManager());
             container.RegisterType<IVariableProcessor, VariableProcessor>(new ContainerControlledLifetimeManager());
             container.RegisterType<IVariableApi, VariableApi>(new ContainerControlledLifetimeManager());
-
+            container.RegisterType<IServiceProcessor, ServiceProcessor>(new ContainerControlledLifetimeManager());
+            
             return container;
         }
 

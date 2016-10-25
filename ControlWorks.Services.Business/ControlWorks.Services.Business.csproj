@@ -70,6 +70,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PviProcessor.cs" />
     <Compile Include="RequestProcessor.cs" />
+    <Compile Include="ServiceProcessor.cs" />
     <Compile Include="TypeRepository.cs" />
     <Compile Include="VariableProcessor.cs" />
   </ItemGroup>

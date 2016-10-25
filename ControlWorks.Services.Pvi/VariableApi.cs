@@ -14,6 +14,7 @@ namespace ControlWorks.Services.Pvi
         Task<VariableDetailRespose> FindByCpuName(string name);
         Task AddRange(string cpuName, IEnumerable<string> variableNames);
         Task RemoveRange(string cpuName, IEnumerable<string> variableNames);
+        Task<VariableDetailRespose> Copy(string source, string destination);
 
 
     }
@@ -94,6 +95,25 @@ namespace ControlWorks.Services.Pvi
             });
         }
 
-
+        public async Task<VariableDetailRespose> Copy(string source, string destination)
+        {
+            var srcCpu = await FindByCpuName(source);
+            if (srcCpu != null)
+            {
+                await AddRange(destination, srcCpu.VariableNames);
+                return await FindByCpuName(source);
+            }
+            else
+            {
+                return new VariableDetailRespose()
+                {
+                    CpuName = destination,
+                    Errors = new ErrorResponse()
+                    {
+                        Error = $"CpuName {source} not found"
+                    }
+                };
+            }
+        }
     }
 }

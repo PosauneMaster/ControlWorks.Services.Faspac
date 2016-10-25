@@ -14,7 +14,7 @@ namespace ControlWorks.Service.Rest
         {
             try
             {
-                var requestProcessor = WebApiApplication.Locator.GetInstance<IRequestProcessor>();
+                var requestProcessor = WebApiApplication.Locator.GetInstance<IServiceProcessor>();
 
                 var details = await requestProcessor.GetServiceDetails();
 

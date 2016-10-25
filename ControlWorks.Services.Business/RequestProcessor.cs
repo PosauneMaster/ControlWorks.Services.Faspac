@@ -11,7 +11,6 @@ namespace ControlWorks.Services.Business
 {
     public interface IRequestProcessor
     {
-        Task<ServiceDetail> GetServiceDetails();
         Task<List<CpuDetailResponse>> GetCpuDetails();
         Task<CpuDetailResponse> GetCpuByName(string name);
         Task<CpuDetailResponse> GetCpuByIp(string ip);
@@ -31,16 +30,6 @@ namespace ControlWorks.Services.Business
         public RequestProcessor(IPviApplication application)
         {
             _application = application;
-        }
-        public async Task<ServiceDetail> GetServiceDetails()
-        {
-            logger.Log(new LogEntry(LoggingEventType.Information, "RequestProcessor Operation=GetServiceDetails"));
-
-            var result = await _application.GetServiceDetails();
-
-            logger.Log(new LogEntry(LoggingEventType.Debug, ToJson(result)));
-
-            return result;
         }
         public async Task<List<CpuDetailResponse>> GetCpuDetails()
         {

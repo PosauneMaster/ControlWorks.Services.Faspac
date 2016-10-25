@@ -17,6 +17,7 @@ namespace ControlWorks.Services.Business
         Task<VariableDetailRespose> FindByCpuName(string name);
         Task Add(string cpuName, IEnumerable<string> variables);
         Task Remove(string cpuName, IEnumerable<string> variables);
+        Task<VariableDetailRespose> Copy(string source, string destination);
 
     }
     public class VariableProcessor : BaseProcessor, IVariableProcessor
@@ -70,6 +71,18 @@ namespace ControlWorks.Services.Business
                 $"VariableProcessor Operation=Remove. cpuName={cpuName}; variables={String.Join(",", variables)}"));
 
             await _variableApi.RemoveRange(cpuName, variables);
+        }
+
+        public async Task<VariableDetailRespose> Copy(string source, string destination)
+        {
+            _logger.Log(new LogEntry(LoggingEventType.Information,
+                $"VariableProcessor Operation=Copy. source={source}; destination={destination}"));
+
+            var response = await _variableApi.Copy(source, destination);
+
+            _logger.Log(new LogEntry(LoggingEventType.Debug, ToJson(response)));
+
+            return response;
         }
     }
 }

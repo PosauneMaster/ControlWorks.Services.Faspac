@@ -18,6 +18,8 @@ namespace ControlWorks.Service.Rest
             var config = new HttpConfiguration();
             config.Formatters.JsonFormatter.SerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
 
+            config.MapHttpAttributeRoutes();
+
             // Configure Web API for self-host. 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

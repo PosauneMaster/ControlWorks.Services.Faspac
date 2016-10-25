@@ -59,6 +59,7 @@ namespace ControlWorks.Service.Rest
         }
 
         [HttpPost]
+        [Route("Add")]
         public async Task<IHttpActionResult> Add(VariableDetailRequest request)
         {
             try
@@ -92,6 +93,22 @@ namespace ControlWorks.Service.Rest
             }
         }
 
-
+        [HttpPost]
+        [Route("Copy")]
+        public async Task<IHttpActionResult> Copy(VariableCopyRequest request)
+        {
+            try
+            {
+                var variableProcessor = WebApiApplication.Locator.GetInstance<IVariableProcessor>();
+                var response = await variableProcessor.Copy(request.Source, request.Destination);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("VariableController.Operation", "Add");
+                WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
+            }
+        }
     }
 }
