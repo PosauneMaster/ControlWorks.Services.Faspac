@@ -16,6 +16,8 @@ namespace ControlWorks.Services.Pvi
     }
     public class VariableInfoCollection
     {
+        const string VARIABLE_MASTER = "VARIABLE_MASTER";
+
         Dictionary<string, VariableInfo> _variableLookup;
 
         public VariableInfoCollection()
@@ -26,19 +28,56 @@ namespace ControlWorks.Services.Pvi
 
         public List<VariableInfo> GetAll()
         {
+            VariableInfo master = null;
+            if (_variableLookup.ContainsKey(VARIABLE_MASTER))
+            {
+                var responseList = new List<VariableInfo>();
+                master = _variableLookup[VARIABLE_MASTER];
+                responseList.Add(master);
+
+                foreach (var vi in _variableLookup.Values)
+                {
+                    if (vi.CpuName != VARIABLE_MASTER)
+                    {
+                        var list = new List<string>(vi.Variables);
+                        list.AddRange(master.Variables);
+                        responseList.Add(new VariableInfo { CpuName = vi.CpuName, Variables = list.ToArray() });
+                    }
+                }
+
+                return responseList;
+
+            }
+
             return _variableLookup.Values.ToList();
+        }
+
+        public void AddCpuRange(string[] cpuList)
+        {
+            foreach (var cpu in cpuList)
+            {
+                if (!_variableLookup.ContainsKey(cpu))
+                {
+                    _variableLookup.Add(cpu, new VariableInfo { CpuName = cpu, Variables= new List<string>().ToArray()});
+                }
+            }
+
+        }
+
+        public void RemoveCpuRange(string[] cpuList)
+        {
+            foreach (var cpu in cpuList)
+            {
+                if (_variableLookup.ContainsKey(cpu))
+                {
+                    _variableLookup.Remove(cpu);
+                }
+            }
         }
 
         public VariableInfo FindByCpu(string name)
         {
-            if (_variableLookup.ContainsKey(name))
-            {
-                return _variableLookup[name];
-            }
-            else
-            {
-                return null;
-            }
+            return GetAll().FirstOrDefault(v => v.CpuName == name);
         }
 
         public void AddRange(string cpuName, IEnumerable<string> variableNames)
@@ -59,6 +98,15 @@ namespace ControlWorks.Services.Pvi
 
         public void Add(string cpuName, string variableName)
         {
+            if (_variableLookup.ContainsKey(VARIABLE_MASTER))
+            {
+                var master = _variableLookup[VARIABLE_MASTER];
+                if (master.Variables.Contains(variableName))
+                {
+                    return;
+                }
+            }
+
             if (!_variableLookup.ContainsKey(cpuName))
             {
                 var info = new VariableInfo();
@@ -78,6 +126,22 @@ namespace ControlWorks.Services.Pvi
         }
 
         public void Remove(string cpuName, string variableName)
+        {
+            if (!_variableLookup.ContainsKey(VARIABLE_MASTER))
+            {
+                RemoveVariable(cpuName, variableName);
+            }
+            else
+            {
+                var master = _variableLookup[VARIABLE_MASTER];
+                if (master.Variables.Contains(variableName))
+                {
+                    RemoveVariable(VARIABLE_MASTER, variableName);
+                }
+            }
+        }
+
+        private void RemoveVariable(string cpuName, string variableName)
         {
             if (_variableLookup.ContainsKey(cpuName))
             {
@@ -126,7 +190,7 @@ namespace ControlWorks.Services.Pvi
                 Directory.CreateDirectory(fi.DirectoryName);
             }
 
-            string json = JsonConvert.SerializeObject(GetAll());
+            string json = JsonConvert.SerializeObject(new List<VariableInfo>(_variableLookup.Values));
             File.WriteAllText(fi.FullName, json);
         }
     }

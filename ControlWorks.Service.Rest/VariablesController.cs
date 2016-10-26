@@ -58,8 +58,9 @@ namespace ControlWorks.Service.Rest
             }
         }
 
+
         [HttpPost]
-        [Route("Add")]
+        [Route("api/variables/Add")]
         public async Task<IHttpActionResult> Add(VariableDetailRequest request)
         {
             try
@@ -76,7 +77,8 @@ namespace ControlWorks.Service.Rest
             }
         }
 
-        [HttpPut]
+        [HttpDelete]
+        [Route("api/variables/Remove")]
         public async Task<IHttpActionResult> Remove(VariableDetailRequest request)
         {
             try
@@ -87,25 +89,79 @@ namespace ControlWorks.Service.Rest
             }
             catch (Exception ex)
             {
-                ex.Data.Add("VariableController.Operation", "Add");
+                ex.Data.Add("VariableController.Operation", "Remove");
                 WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
             }
         }
 
         [HttpPost]
-        [Route("Copy")]
+        [Route("api/variables/Copy")]
         public async Task<IHttpActionResult> Copy(VariableCopyRequest request)
         {
             try
             {
                 var variableProcessor = WebApiApplication.Locator.GetInstance<IVariableProcessor>();
                 var response = await variableProcessor.Copy(request.Source, request.Destination);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("VariableController.Operation", "Copy");
+                WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
+            }
+        }
+
+        [HttpPost]
+        [Route("api/variables/Master")]
+        public async Task<IHttpActionResult> Master(string[] request)
+        {
+            try
+            {
+                var variableProcessor = WebApiApplication.Locator.GetInstance<IVariableProcessor>();
+                await variableProcessor.AddMaster(request);
                 return Ok();
             }
             catch (Exception ex)
             {
-                ex.Data.Add("VariableController.Operation", "Add");
+                ex.Data.Add("VariableController.Operation", "Master");
+                WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
+            }
+        }
+
+        [HttpPost]
+        [Route("api/variables/AddCpu")]
+        public async Task<IHttpActionResult> AddCpu(string[] request)
+        {
+            try
+            {
+                var variableProcessor = WebApiApplication.Locator.GetInstance<IVariableProcessor>();
+                await variableProcessor.AddCpuRange(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("VariableController.Operation", "AddCpu");
+                WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
+            }
+        }
+
+        [HttpDelete]
+        [Route("api/variables/DeleteCpu")]
+        public async Task<IHttpActionResult> DeleteCpu(string[] request)
+        {
+            try
+            {
+                var variableProcessor = WebApiApplication.Locator.GetInstance<IVariableProcessor>();
+                await variableProcessor.RemoveCpuRange(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("VariableController.Operation", "DeleteCpu");
                 WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
             }

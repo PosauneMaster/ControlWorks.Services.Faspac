@@ -15,11 +15,13 @@ namespace ControlWorks.Services.Pvi
         Task AddRange(string cpuName, IEnumerable<string> variableNames);
         Task RemoveRange(string cpuName, IEnumerable<string> variableNames);
         Task<VariableDetailRespose> Copy(string source, string destination);
-
+        Task AddCpuRange(string[] cpus);
+        Task RemoveCpuRange(string[] cpus);
 
     }
     public class VariableApi : IVariableApi
     {
+
         public async Task<List<VariableDetailRespose>> GetAll()
         {
             var list = new List<VariableDetailRespose>();
@@ -73,6 +75,30 @@ namespace ControlWorks.Services.Pvi
             };
         }
 
+        public async Task AddCpuRange(string[] cpus)
+        {
+            await Task.Run(() =>
+            {
+                var collection = new VariableInfoCollection();
+                collection.Open(ConfigurationProvider.VariableSettingsFile);
+                collection.AddCpuRange(cpus);
+                collection.Save(ConfigurationProvider.VariableSettingsFile);
+            });
+        }
+
+        public async Task RemoveCpuRange(string[] cpus)
+        {
+            await Task.Run(() =>
+            {
+                var collection = new VariableInfoCollection();
+                collection.Open(ConfigurationProvider.VariableSettingsFile);
+                collection.RemoveCpuRange(cpus);
+                collection.Save(ConfigurationProvider.VariableSettingsFile);
+            });
+        }
+
+
+
         public async Task AddRange(string cpuName, IEnumerable<string> variableNames)
         {
             await Task.Run(() =>
@@ -98,10 +124,10 @@ namespace ControlWorks.Services.Pvi
         public async Task<VariableDetailRespose> Copy(string source, string destination)
         {
             var srcCpu = await FindByCpuName(source);
-            if (srcCpu != null)
+            if (srcCpu != null && srcCpu.Errors == null)
             {
                 await AddRange(destination, srcCpu.VariableNames);
-                return await FindByCpuName(source);
+                return await FindByCpuName(destination);
             }
             else
             {

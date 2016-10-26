@@ -18,10 +18,15 @@ namespace ControlWorks.Services.Business
         Task Add(string cpuName, IEnumerable<string> variables);
         Task Remove(string cpuName, IEnumerable<string> variables);
         Task<VariableDetailRespose> Copy(string source, string destination);
+        Task AddMaster(string[] variables);
+        Task AddCpuRange(string[] cpus);
+        Task RemoveCpuRange(string[] cpus);
 
     }
     public class VariableProcessor : BaseProcessor, IVariableProcessor
     {
+        const string VARIABLE_MASTER = "VARIABLE_MASTER";
+
         IVariableApi _variableApi;
         ILogger _logger;
 
@@ -84,5 +89,30 @@ namespace ControlWorks.Services.Business
 
             return response;
         }
+
+        public async Task AddMaster(string[] variables)
+        {
+            _logger.Log(new LogEntry(LoggingEventType.Information,
+                $"VariableProcessor Operation=AddMaster. cpuName={VARIABLE_MASTER},  variables={String.Join(",", variables)}"));
+
+            await _variableApi.AddRange(VARIABLE_MASTER, variables);
+        }
+
+        public async Task AddCpuRange(string[] cpus)
+        {
+            _logger.Log(new LogEntry(LoggingEventType.Information,
+                $"VariableProcessor Operation=AddCpuRange. cpu list={String.Join(",", cpus)}"));
+
+            await _variableApi.AddCpuRange(cpus);
+        }
+
+        public async Task RemoveCpuRange(string[] cpus)
+        {
+            _logger.Log(new LogEntry(LoggingEventType.Information,
+                $"VariableProcessor Operation=RemoveCpuRange. cpu list={String.Join(",", cpus)}"));
+
+            await _variableApi.RemoveCpuRange(cpus);
+        }
+
     }
 }
