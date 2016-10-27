@@ -11,7 +11,8 @@ namespace ControlWorks.Services.Pvi
     public interface IVariableApi
     {
         Task<List<VariableDetailRespose>> GetAll();
-        Task<VariableDetailRespose> FindByCpuName(string name);
+        Task<VariableDetailRespose> FindByCpuNameAsync(string name);
+        VariableDetailRespose FindByCpuName(string name);
         Task AddRange(string cpuName, IEnumerable<string> variableNames);
         Task RemoveRange(string cpuName, IEnumerable<string> variableNames);
         Task<VariableDetailRespose> Copy(string source, string destination);
@@ -21,7 +22,6 @@ namespace ControlWorks.Services.Pvi
     }
     public class VariableApi : IVariableApi
     {
-
         public async Task<List<VariableDetailRespose>> GetAll()
         {
             var list = new List<VariableDetailRespose>();
@@ -45,7 +45,7 @@ namespace ControlWorks.Services.Pvi
             return list;
         }
 
-        public async Task<VariableDetailRespose> FindByCpuName(string name)
+        public async Task<VariableDetailRespose> FindByCpuNameAsync(string name)
         {
             var response = await Task.Run(() =>
             {
@@ -64,6 +64,32 @@ namespace ControlWorks.Services.Pvi
                     Errors = new ErrorResponse
                     {
                          Error = $"No entry exists with the Cpu name {name}"
+                    }
+                };
+            }
+
+            return new VariableDetailRespose
+            {
+                CpuName = response.CpuName,
+                VariableNames = response.Variables
+            };
+        }
+
+        public VariableDetailRespose FindByCpuName(string name)
+        {
+            var collection = new VariableInfoCollection();
+            collection.Open(ConfigurationProvider.VariableSettingsFile);
+            var response = collection.FindByCpu(name);
+
+            if (response == null)
+            {
+                return new VariableDetailRespose
+                {
+                    CpuName = name,
+                    VariableNames = null,
+                    Errors = new ErrorResponse
+                    {
+                        Error = $"No entry exists with the Cpu name {name}"
                     }
                 };
             }
@@ -123,11 +149,11 @@ namespace ControlWorks.Services.Pvi
 
         public async Task<VariableDetailRespose> Copy(string source, string destination)
         {
-            var srcCpu = await FindByCpuName(source);
+            var srcCpu = await FindByCpuNameAsync(source);
             if (srcCpu != null && srcCpu.Errors == null)
             {
                 await AddRange(destination, srcCpu.VariableNames);
-                return await FindByCpuName(destination);
+                return await FindByCpuNameAsync(destination);
             }
             else
             {

@@ -55,7 +55,7 @@ namespace ControlWorks.Services.Business
         {
             _logger.Log(new LogEntry(LoggingEventType.Information, $"VariableProcessor Operation=FindByCpuName. name={name}"));
 
-            var response = await _variableApi.FindByCpuName(name);
+            var response = await _variableApi.FindByCpuNameAsync(name);
 
             _logger.Log(new LogEntry(LoggingEventType.Debug, ToJson(response)));
 

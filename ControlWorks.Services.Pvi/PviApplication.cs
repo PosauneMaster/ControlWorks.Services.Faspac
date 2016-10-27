@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Dynamic;
 
 namespace ControlWorks.Services.Pvi
 {
@@ -19,6 +20,8 @@ namespace ControlWorks.Services.Pvi
         Task UpdateCpu(CpuInfo info);
         Task DeleteCpuByName(string name);
         Task DeleteCpuByIp(string ip);
+        Task<DataResponse> GetCpuData(string cpuName);
+
     }
 
     public class PviApplication : IPviApplication
@@ -128,6 +131,46 @@ namespace ControlWorks.Services.Pvi
                  });
 
             return detail;
+        }
+
+        public async Task<DataResponse> GetCpuData(string cpuName)
+        {
+            var dataResponse = await Task.Run(() =>
+            {
+                dynamic variables = new ExpandoObject();
+                var variableDict = (IDictionary<string, object>)variables;
+
+                var service = _context.PviService;
+                var variableApi = new VariableApi();
+                var variableInfo = variableApi.FindByCpuName(cpuName);
+
+                if (variableInfo.Errors == null || !service.Cpus.ContainsKey(cpuName))
+                {
+                    return new DataResponse
+                    {
+                        Name = cpuName,
+                        Data = null,
+                        Error = new ErrorResponse
+                        {
+                            Error = $"A Cpu with the name {cpuName} is not found"
+                        }
+                    };
+                }
+
+                int index = 0;
+                foreach (var setting in variableInfo.VariableNames)
+                {
+                    variableDict.Add(setting, $"datapoint_{++index}");
+                }
+
+                return new DataResponse
+                {
+                    Name = cpuName,
+                    Data = variableDict as ExpandoObject
+                };
+            }).ConfigureAwait(false);
+
+            return dataResponse;
         }
     }
 }

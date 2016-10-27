@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="BaseProcessor.cs" />
     <Compile Include="ConfigurationProcessor.cs" />
+    <Compile Include="DataProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PviProcessor.cs" />
     <Compile Include="RequestProcessor.cs" />

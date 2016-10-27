@@ -52,6 +52,7 @@
     <Compile Include="ConnectionInfo.cs" />
     <Compile Include="CpuDetailResponse.cs" />
     <Compile Include="CpuInfoRequest.cs" />
+    <Compile Include="DataResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseMessage.cs" />
     <Compile Include="ServiceDetail.cs" />
