@@ -144,7 +144,7 @@ namespace ControlWorks.Services.Pvi
                 var variableApi = new VariableApi();
                 var variableInfo = variableApi.FindByCpuName(cpuName);
 
-                if (variableInfo.Errors == null || !service.Cpus.ContainsKey(cpuName))
+                if (variableInfo.Errors != null || !service.Cpus.ContainsKey(cpuName))
                 {
                     return new DataResponse
                     {

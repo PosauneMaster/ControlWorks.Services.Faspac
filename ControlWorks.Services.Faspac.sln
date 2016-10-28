@@ -24,6 +24,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHarness", "TestHarness\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlWorks.Services.Business", "ControlWorks.Services.Business\ControlWorks.Services.Business.csproj", "{122D2116-98B5-4F49-A0CC-0E97F451E52B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{C742D334-BED4-4144-AFFD-96676CC1B679}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\Service Architecture.docx = Documentation\Service Architecture.docx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

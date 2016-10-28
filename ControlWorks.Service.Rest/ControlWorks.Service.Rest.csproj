@@ -121,6 +121,7 @@
   <ItemGroup>
     <Compile Include="AppSettingsController.cs" />
     <Compile Include="CpuController.cs" />
+    <Compile Include="DataController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PviController.cs" />
     <Compile Include="ConnectionController.cs" />

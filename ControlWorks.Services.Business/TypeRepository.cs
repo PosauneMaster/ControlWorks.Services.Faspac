@@ -32,7 +32,8 @@ namespace ControlWorks.Services.Business
             container.RegisterType<IVariableProcessor, VariableProcessor>(new ContainerControlledLifetimeManager());
             container.RegisterType<IVariableApi, VariableApi>(new ContainerControlledLifetimeManager());
             container.RegisterType<IServiceProcessor, ServiceProcessor>(new ContainerControlledLifetimeManager());
-            
+            container.RegisterType<IDataProcessor, DataProcessor>(new ContainerControlledLifetimeManager());
+
             return container;
         }
 
@@ -40,7 +41,5 @@ namespace ControlWorks.Services.Business
         {
             return ServiceLocator.Current.GetInstance<T>();
         }
-
-
     }
 }
