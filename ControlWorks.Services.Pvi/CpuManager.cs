@@ -7,24 +7,48 @@ using System.Threading;
 
 namespace ControlWorks.Services.Pvi
 {
+
     public class CpuManager
     {
-
-
         private readonly byte _sourceStationId = 100;
         private AutoResetEvent _disconnectWaitHandle;
 
         private ILogger _logger;
         private Service _service;
 
+        private List<string> _cpuLoaded;
+        private int _expectedCpus;
+
+        public event EventHandler<CpusLoadedEventArgs> CpusLoaded;
+
         public CpuManager(Service service)
         {
             _logger = new Log4netAdapter(LogManager.GetLogger("ServiceLogger"));
             _service = service;
+            _cpuLoaded = new List<string>();
+            _expectedCpus = 0;
         }
 
-        public void LoadCpuCollection(IEnumerable<CpuInfo> cpuCollection)
+        private void UpdateLoaded(string cpuName)
         {
+            if (!_cpuLoaded.Contains(cpuName))
+            {
+                _cpuLoaded.Add(cpuName);
+            }
+
+            if (_cpuLoaded.Count == _expectedCpus)
+            {
+                EventHandler<CpusLoadedEventArgs> temp = CpusLoaded;
+                if (temp != null)
+                {
+                    temp(this, new CpusLoadedEventArgs() { Cpus = new List<string>(_cpuLoaded) });
+                }
+            }
+        }
+
+        public void LoadCpuCollection(IList<CpuInfo> cpuCollection)
+        {
+            _expectedCpus = cpuCollection.Count;
             foreach (var cpu in cpuCollection)
             {
                 CreateCpu(cpu.Name, cpu.IpAddress);
@@ -90,6 +114,12 @@ namespace ControlWorks.Services.Pvi
 
         private void cpu_Connected(object sender, PviEventArgs e)
         {
+            Cpu cpu = sender as Cpu;
+            if (cpu != null)
+            {
+                UpdateLoaded(e.Name);
+            }
+
             _logger.Log(new LogEntry(LoggingEventType.Information, PviMessage.FormatMessage("Cpu Connected", e)));
         }
         private void cpu_Error(object sender, PviEventArgs e)
@@ -102,6 +132,8 @@ namespace ControlWorks.Services.Pvi
                 cpu.Connected -= cpu_Connected;
                 cpu.Error -= cpu_Error;
                 cpu.Disconnected -= cpu_Disconnected;
+
+                UpdateLoaded(e.Name);
             }
         }
 
@@ -116,6 +148,7 @@ namespace ControlWorks.Services.Pvi
                 cpu.Error -= cpu_Error;
                 cpu.Disconnected -= cpu_Disconnected;
 
+                UpdateLoaded(e.Name);
             }
 
             if (_disconnectWaitHandle != null)
@@ -123,5 +156,10 @@ namespace ControlWorks.Services.Pvi
                 _disconnectWaitHandle.Set();
             }
         }
+    }
+
+    public class CpusLoadedEventArgs : EventArgs
+    {
+        public List<string> Cpus { get; set; }
     }
 }
