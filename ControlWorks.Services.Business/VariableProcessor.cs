@@ -68,6 +68,7 @@ namespace ControlWorks.Services.Business
                 $"VariableProcessor Operation=Add. cpuName={cpuName}; variables={String.Join(",", variables)}"));
 
             await _variableApi.AddRange(cpuName, variables);
+
         }
 
         public async Task Remove(string cpuName, IEnumerable<string> variables)

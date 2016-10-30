@@ -67,6 +67,10 @@ namespace ControlWorks.Service.Rest
             {
                 var variableProcessor = WebApiApplication.Locator.GetInstance<IVariableProcessor>();
                 await variableProcessor.Add(request.CpuName, request.Variables);
+
+                var pviProcessor = WebApiApplication.Locator.GetInstance<IPviProcessor>();
+                await pviProcessor.RefreshVariables().ConfigureAwait(false);
+
                 return Ok();
             }
             catch (Exception ex)

@@ -10,6 +10,8 @@ namespace ControlWorks.Services.Business
     public interface IPviProcessor
     {
         void Connect();
+        Task RefreshVariables();
+
     }
 
     public class PviProcessor : BaseProcessor, IPviProcessor
@@ -24,6 +26,11 @@ namespace ControlWorks.Services.Business
         public void Connect()
         {
             _pviApplication.Connect();
+        }
+
+        public async Task RefreshVariables()
+        {
+            await _pviApplication.UpdateVariables();
         }
 
     }

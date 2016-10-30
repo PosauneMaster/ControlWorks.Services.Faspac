@@ -21,7 +21,7 @@ namespace ControlWorks.Services.Pvi
         Task DeleteCpuByName(string name);
         Task DeleteCpuByIp(string ip);
         Task<DataResponse> GetCpuData(string cpuName);
-
+        Task UpdateVariables();
     }
 
     public class PviApplication : IPviApplication
@@ -173,6 +173,16 @@ namespace ControlWorks.Services.Pvi
             }).ConfigureAwait(false);
 
             return dataResponse;
+        }
+
+        public async Task UpdateVariables()
+        {
+            await Task.Run(() =>
+            {
+                var variableApi = new VariableApi();
+                var manager = new VariableManager(_context.PviService, variableApi);
+                manager.ConnectVariables();
+            });
         }
     }
 }
