@@ -18,6 +18,7 @@ namespace ControlWorks.Services.Pvi
 
         private List<string> _cpuLoaded;
         private int _expectedCpus;
+        public bool _shouldNotify = true;
 
         public event EventHandler<CpusLoadedEventArgs> CpusLoaded;
 
@@ -36,11 +37,14 @@ namespace ControlWorks.Services.Pvi
                 _cpuLoaded.Add(cpuName);
             }
 
-            if (_cpuLoaded.Count == _expectedCpus)
+            if (_cpuLoaded.Count == _expectedCpus && _shouldNotify)
             {
+                _shouldNotify = false;
                 EventHandler<CpusLoadedEventArgs> temp = CpusLoaded;
                 if (temp != null)
                 {
+                    _logger.Log(new LogEntry(LoggingEventType.Information, $"Cpu finished loading, total = {_cpuLoaded.Count} Raising CpusLoaded event"));
+
                     temp(this, new CpusLoadedEventArgs() { Cpus = new List<string>(_cpuLoaded) });
                 }
             }

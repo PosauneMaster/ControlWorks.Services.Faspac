@@ -3,13 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ControlWorks.Services.Pvi
 {
     public class CpuInfoCollection
     {
+        private static readonly object _syncLock = new object();
         Dictionary<string, CpuInfo> _cpuLookup;
 
         public CpuInfoCollection()
@@ -64,22 +63,25 @@ namespace ControlWorks.Services.Pvi
 
         public bool Open(string filepath)
         {
-            try
+            lock(_syncLock)
             {
-                if (File.Exists(filepath))
+                try
                 {
-                    var json = File.ReadAllText(filepath);
-                    var list = JsonConvert.DeserializeObject<List<CpuInfo>>(json);
-                    _cpuLookup.Clear();
-                    foreach (var cpu in list)
+                    if (File.Exists(filepath))
                     {
-                        AddOrUpdate(cpu);
+                        var json = FileAccess.Read(filepath);
+                        var list = JsonConvert.DeserializeObject<List<CpuInfo>>(json);
+                        _cpuLookup.Clear();
+                        foreach (var cpu in list)
+                        {
+                            AddOrUpdate(cpu);
+                        }
                     }
                 }
-            }
-            catch
-            {
-                throw;
+                catch
+                {
+                    throw;
+                }
             }
 
             return true;
@@ -101,7 +103,7 @@ namespace ControlWorks.Services.Pvi
                 }
 
                 string json = JsonConvert.SerializeObject(GetAll());
-                File.WriteAllText(fi.FullName, json);
+                FileAccess.Write(fi.FullName, json);
 
             }
             catch

@@ -63,7 +63,7 @@ namespace ControlWorks.Services.Pvi
         {
             var api = new CpuApi(_context.PviService.Cpus);
 
-            return await Task.Run(() => api.FindByIp(ip));
+            return await Task.Run(() => api.FindByIp(ip)).ConfigureAwait(false);
         }
 
         public async Task AddCpu(CpuInfo info)
@@ -74,7 +74,7 @@ namespace ControlWorks.Services.Pvi
             {
                 api.Add(info);
                 _context.CpuService.CreateCpu(info.Name, info.IpAddress);
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task UpdateCpu(CpuInfo info)
@@ -85,7 +85,7 @@ namespace ControlWorks.Services.Pvi
             {
                 api.Update(info);
                 _context.CpuService.CreateCpu(info.Name, info.IpAddress);
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task DeleteCpuByName(string name)
@@ -97,7 +97,7 @@ namespace ControlWorks.Services.Pvi
                 {
                     _context.CpuService.DisconnectCpu(name);
                 }
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task DeleteCpuByIp(string ip)
@@ -110,7 +110,7 @@ namespace ControlWorks.Services.Pvi
                 {
                     _context.CpuService.DisconnectCpu(cpu.Name);
                 }
-            });
+            }).ConfigureAwait(false);
         }
 
 
@@ -128,7 +128,7 @@ namespace ControlWorks.Services.Pvi
                         ConnectTime = _connectionTime,
                         License = service.LicenceInfo.ToString()
                     };
-                 });
+                 }).ConfigureAwait(false);
 
             return detail;
         }
@@ -157,10 +157,12 @@ namespace ControlWorks.Services.Pvi
                     };
                 }
 
-                int index = 0;
-                foreach (var setting in variableInfo.VariableNames)
+                var manager = new VariableManager(_context.PviService, variableApi);
+                var values = manager.ReadVariables(cpuName);
+
+                foreach (var tuple in values)
                 {
-                    variableDict.Add(setting, $"datapoint_{++index}");
+                    variableDict.Add(tuple.Item1, tuple.Item2);
                 }
 
                 return new DataResponse

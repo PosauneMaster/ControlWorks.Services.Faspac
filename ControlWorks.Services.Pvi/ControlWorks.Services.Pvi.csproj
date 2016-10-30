@@ -61,7 +61,9 @@
     <Compile Include="PviManager.cs" />
     <Compile Include="PviMessage.cs" />
     <Compile Include="VariableApi.cs" />
+    <Compile Include="FileAccess.cs" />
     <Compile Include="VariableInfoCollection.cs" />
+    <Compile Include="VariableManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ControlWorks.Logging\ControlWorks.Logging.csproj">

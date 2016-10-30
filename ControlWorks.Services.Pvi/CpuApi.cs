@@ -142,11 +142,18 @@ namespace ControlWorks.Services.Pvi
         {
             var detail = new CpuDetailResponse();
             detail.Description = setting.Description;
-            detail.Error = new CpuError { ErrorCode = cpu.ErrorCode, ErrorText = cpu.ErrorText };
             detail.HasError = cpu.HasError;
             detail.IpAddress = setting.IpAddress;
             detail.IsConnected = cpu.IsConnected;
             detail.Name = setting.Name;
+            if (cpu.HasError)
+            {
+                detail.Error = new CpuError { ErrorCode = cpu.ErrorCode, ErrorText = cpu.ErrorText };
+            }
+            else
+            {
+                detail.Error = null;
+            }
 
             return detail;
         }

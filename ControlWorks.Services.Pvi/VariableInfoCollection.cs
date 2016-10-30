@@ -1,11 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ControlWorks.Services.Pvi
 {
@@ -16,6 +13,8 @@ namespace ControlWorks.Services.Pvi
     }
     public class VariableInfoCollection
     {
+        public static readonly object _syncLock = new object();
+
         const string VARIABLE_MASTER = "VARIABLE_MASTER";
 
         Dictionary<string, VariableInfo> _variableLookup;
@@ -163,15 +162,18 @@ namespace ControlWorks.Services.Pvi
 
         public void Open(string filepath)
         {
-            if (File.Exists(filepath))
+            lock(_syncLock)
             {
-                var json = File.ReadAllText(filepath);
-                var list = JsonConvert.DeserializeObject<List<VariableInfo>>(json);
-                _variableLookup.Clear();
-
-                foreach (var v in list)
+                if (File.Exists(filepath))
                 {
-                    _variableLookup.Add(v.CpuName, v);
+                    var json = FileAccess.Read(filepath);
+                    var list = JsonConvert.DeserializeObject<List<VariableInfo>>(json);
+                    _variableLookup.Clear();
+
+                    foreach (var v in list)
+                    {
+                        _variableLookup.Add(v.CpuName, v);
+                    }
                 }
             }
         }
@@ -191,7 +193,8 @@ namespace ControlWorks.Services.Pvi
             }
 
             string json = JsonConvert.SerializeObject(new List<VariableInfo>(_variableLookup.Values));
-            File.WriteAllText(fi.FullName, json);
+
+            FileAccess.Write(fi.FullName, json);
         }
     }
 }

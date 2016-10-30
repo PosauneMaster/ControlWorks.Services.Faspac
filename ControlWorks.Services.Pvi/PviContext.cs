@@ -1,11 +1,6 @@
 ﻿using BR.AN.PviServices;
 using ControlWorks.Logging;
 using ControlWorks.Services.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ControlWorks.Services.Pvi
@@ -54,8 +49,10 @@ namespace ControlWorks.Services.Pvi
         private void CpuService_CpusLoaded(object sender, CpusLoadedEventArgs e)
         {
             var variable = new VariableApi();
-            var task = variable.AddCpuRange(e.Cpus.ToArray());
-            task.Wait();
+            var task = variable.AddCpuRange(e.Cpus.ToArray()).ConfigureAwait(false);
+
+            var manager = new VariableManager(PviService, variable);
+            manager.ConnectVariables();
         }
 
         public void LoadCpu(CpuInfo info)

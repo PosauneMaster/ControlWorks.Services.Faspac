@@ -1,9 +1,6 @@
 ﻿using ControlWorks.Services.Configuration;
 using ControlWorks.Services.Data;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ControlWorks.Services.Pvi
@@ -31,7 +28,7 @@ namespace ControlWorks.Services.Pvi
                 var collection = new VariableInfoCollection();
                 collection.Open(ConfigurationProvider.VariableSettingsFile);
                 return collection.GetAll();
-            });
+            }).ConfigureAwait(false);
 
             foreach (var v in response)
             {
@@ -53,7 +50,7 @@ namespace ControlWorks.Services.Pvi
                 collection.Open(ConfigurationProvider.VariableSettingsFile);
 
                 return collection.FindByCpu(name);
-            });
+            }).ConfigureAwait(false);
 
             if (response == null)
             {
@@ -109,7 +106,8 @@ namespace ControlWorks.Services.Pvi
                 collection.Open(ConfigurationProvider.VariableSettingsFile);
                 collection.AddCpuRange(cpus);
                 collection.Save(ConfigurationProvider.VariableSettingsFile);
-            });
+            }).ConfigureAwait(false);
+
         }
 
         public async Task RemoveCpuRange(string[] cpus)
@@ -120,7 +118,7 @@ namespace ControlWorks.Services.Pvi
                 collection.Open(ConfigurationProvider.VariableSettingsFile);
                 collection.RemoveCpuRange(cpus);
                 collection.Save(ConfigurationProvider.VariableSettingsFile);
-            });
+            }).ConfigureAwait(false);
         }
 
 
@@ -133,7 +131,7 @@ namespace ControlWorks.Services.Pvi
                 collection.Open(ConfigurationProvider.VariableSettingsFile);
                 collection.AddRange(cpuName, variableNames);
                 collection.Save(ConfigurationProvider.VariableSettingsFile);
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task RemoveRange(string cpuName, IEnumerable<string> variableNames)
@@ -144,7 +142,7 @@ namespace ControlWorks.Services.Pvi
                 collection.Open(ConfigurationProvider.VariableSettingsFile);
                 collection.RemoveRange(cpuName, variableNames);
                 collection.Save(ConfigurationProvider.VariableSettingsFile);
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task<VariableDetailRespose> Copy(string source, string destination)
@@ -152,8 +150,8 @@ namespace ControlWorks.Services.Pvi
             var srcCpu = await FindByCpuNameAsync(source);
             if (srcCpu != null && srcCpu.Errors == null)
             {
-                await AddRange(destination, srcCpu.VariableNames);
-                return await FindByCpuNameAsync(destination);
+                await AddRange(destination, srcCpu.VariableNames).ConfigureAwait(false);
+                return await FindByCpuNameAsync(destination).ConfigureAwait(false);
             }
             else
             {
