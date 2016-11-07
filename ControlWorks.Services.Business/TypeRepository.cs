@@ -1,5 +1,6 @@
 ﻿using ControlWorks.Services.Configuration;
 using ControlWorks.Services.Pvi;
+using ControlWorks.Services.Sql;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
 
@@ -33,6 +34,11 @@ namespace ControlWorks.Services.Business
             container.RegisterType<IVariableApi, VariableApi>(new ContainerControlledLifetimeManager());
             container.RegisterType<IServiceProcessor, ServiceProcessor>(new ContainerControlledLifetimeManager());
             container.RegisterType<IDataProcessor, DataProcessor>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ISqlApi, SqlApi>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IEventNotifier, EventNotifier>(new ContainerControlledLifetimeManager());
+            
+
+
 
             return container;
         }

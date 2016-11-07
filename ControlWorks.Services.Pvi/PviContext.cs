@@ -1,21 +1,24 @@
 ﻿using BR.AN.PviServices;
 using ControlWorks.Logging;
 using ControlWorks.Services.Configuration;
+using System;
 using System.Windows.Forms;
 
 namespace ControlWorks.Services.Pvi
 {
     public class PviContext : ApplicationContext
     {
-
         public Service PviService { get; private set; }
         public CpuManager CpuService { get; private set; }
 
         private ILogger _logger;
+        private IEventNotifier _notifier;
+
         public PviContext() { }
-        public PviContext(ILogger logger)
+        public PviContext(ILogger logger, IEventNotifier notifier)
         {
             _logger = logger;
+            _notifier = notifier;
             ConnectPvi();
         }
 
@@ -51,7 +54,7 @@ namespace ControlWorks.Services.Pvi
             var variable = new VariableApi();
             var task = variable.AddCpuRange(e.Cpus.ToArray()).ConfigureAwait(false);
 
-            var manager = new VariableManager(PviService, variable);
+            var manager = new VariableManager(PviService, variable, _notifier);
             manager.ConnectVariables();
         }
 

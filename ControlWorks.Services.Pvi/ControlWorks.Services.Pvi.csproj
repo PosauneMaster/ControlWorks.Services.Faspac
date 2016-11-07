@@ -60,8 +60,10 @@
     <Compile Include="PviContext.cs" />
     <Compile Include="PviManager.cs" />
     <Compile Include="PviMessage.cs" />
+    <Compile Include="EventNotifier.cs" />
     <Compile Include="VariableApi.cs" />
     <Compile Include="FileAccess.cs" />
+    <Compile Include="ShutdownEventArgs.cs" />
     <Compile Include="VariableInfoCollection.cs" />
     <Compile Include="VariableManager.cs" />
   </ItemGroup>

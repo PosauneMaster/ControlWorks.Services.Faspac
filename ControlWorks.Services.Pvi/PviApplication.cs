@@ -11,7 +11,7 @@ namespace ControlWorks.Services.Pvi
 {
     public interface IPviApplication
     {
-        void Connect();
+        void Connect(IEventNotifier notifier);
         Task<ServiceDetail> GetServiceDetails();
         Task<List<CpuDetailResponse>> GetCpuDetails();
         Task<CpuDetailResponse> GetCpuByName(string name);
@@ -38,12 +38,13 @@ namespace ControlWorks.Services.Pvi
             _logger = new Log4netAdapter(LogManager.GetLogger("ServiceLogger"));
         }
 
-        public void Connect()
+        public void Connect(IEventNotifier notifier)
         {
-            _context = new PviContext(_logger);
+            _context = new PviContext(_logger, notifier);
             _connectionTime = DateTime.Now;
             Application.Run(_context);
         }
+
 
         public async Task<CpuDetailResponse> GetCpuByName(string name)
         {
