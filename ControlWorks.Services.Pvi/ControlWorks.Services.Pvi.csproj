@@ -52,10 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ControlWorks.Services.Faspac\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="CpuApi.cs" />
     <Compile Include="CpuInfo.cs" />
     <Compile Include="CpuManager.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PviApplication.cs" />
     <Compile Include="PviContext.cs" />
     <Compile Include="PviManager.cs" />

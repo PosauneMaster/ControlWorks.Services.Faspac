@@ -31,6 +31,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlWorks.Services.Sql", "ControlWorks.Services.Sql\ControlWorks.Services.Sql.csproj", "{D3E5B385-46CD-42DB-8964-46DDD88F338B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{5C6915E7-22F5-4295-934F-3D202C4233BD}"
+	ProjectSection(SolutionItems) = preProject
+		sql\MachineSnapshot.sql = sql\MachineSnapshot.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

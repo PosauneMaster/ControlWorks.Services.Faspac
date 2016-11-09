@@ -35,5 +35,31 @@ namespace ControlWorks.Service.Rest
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
             }
         }
+
+        [HttpPost]
+        public async Task<IHttpActionResult> Snapshot(string id)
+        {
+            try
+            {
+                var requestProcessor = WebApiApplication.Locator.GetInstance<IDataProcessor>();
+
+                var details = await requestProcessor.Snapshot(id);
+
+                if (details == null)
+                {
+                    var message = "Cpu data not found";
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, message));
+                }
+
+                return Ok(details);
+            }
+            catch (Exception ex)
+            {
+                ex.Data.Add("PviController.Operation", "GetData");
+                WebApiApplication.Logger.Log(new LogEntry(LoggingEventType.Error, ex.Message, ex));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message));
+            }
+        }
+
     }
 }
