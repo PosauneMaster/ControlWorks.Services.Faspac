@@ -34,7 +34,7 @@ namespace ControlWorks.Service.Faspac
                     configuration.SetDisplayName(name);
                     configuration.SetServiceName(name);
                     configuration.SetDescription(description);
-                    configuration.RunAsLocalService();
+                    configuration.RunAsLocalSystem();
                 });
                 host.Run();
             }
