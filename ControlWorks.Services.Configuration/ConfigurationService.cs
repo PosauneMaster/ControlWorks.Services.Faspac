@@ -24,7 +24,7 @@ namespace ControlWorks.Services.Configuration
             var mainDict = (IDictionary<string, object>)main;
 
             mainDict.Add("appSettingsFile", GetSettingFile());
-            mainDict.Add("configSourceFile", GetConfigSource());
+            mainDict.Add("connectionStringFile", GetConfigSource());
             mainDict.Add("LogFile", logFileName);
 
             dynamic settings = new ExpandoObject();
@@ -61,9 +61,8 @@ namespace ControlWorks.Services.Configuration
         public string GetSettingFile()
         {
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            AppSettingsSection appSettings = config.AppSettings;
 
-            return Path.Combine(Directory.GetCurrentDirectory(), appSettings.File);
+            return Path.Combine(Directory.GetCurrentDirectory(), config.AppSettings.SectionInformation.ConfigSource);
         }
 
         public string GetConfigSource()
